@@ -1,0 +1,16 @@
+packages:
+  "framer-motion": "For page transitions, smooth section reveals, and dropdown animations"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility to merge Tailwind classes without style conflicts"
+  "react-hook-form": "For form state management and validation"
+  "@hookform/resolvers": "For Zod validation integration with react-hook-form"
+
+images:
+  - path: "artifacts/bap-website/public/images/logo-icon.png"
+    description: "A clean, modern corporate logo mark consisting of a minimalist green spiral or geometric aperture shape on a transparent background, suitable for a professional consulting firm"
+    aspect_ratio: "1:1"
+
+notes:
+  - "The application is purely frontend. The contact form uses a mocked mutation hook that simulates an API call."
+  - "Using wouter for routing."
+  - "Tailwind CSS v4 is used for styling with custom defined CSS variables."

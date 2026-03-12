@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: 'DM Sans', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-heading: hsl(var(--heading));
+  
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-blue-accent: hsl(var(--blue-accent));
+}
+
+:root {
+  /* BAP & Associates Color Palette */
+  --background: 0 0% 100%;
+  --foreground: 120 2% 39%; /* #616561 Dark Grey */
+  --heading: 213 80% 17%; /* #09284F Primary Dark Navy */
+  
+  --primary: 213 80% 17%; /* #09284F */
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 102 14% 86%; /* #DAE1D7 Light Grey */
+  --secondary-foreground: 213 80% 17%;
+  
+  --accent: 98 47% 49%; /* #6EB743 Accent Green */
+  --accent-foreground: 0 0% 100%;
+  
+  --muted: 212 20% 46%; /* #5E748E Medium Blue-Grey */
+  --muted-foreground: 120 2% 39%;
+  
+  --blue-accent: 224 71% 55%; /* #3964DD */
+  
+  --border: 102 14% 86%;
+  --input: 102 14% 86%;
+  --ring: 98 47% 49%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 120 2% 39%;
+  
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight text-heading;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/90 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-accent;
+  }
+}

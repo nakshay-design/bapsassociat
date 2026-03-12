@@ -1,0 +1,14 @@
+# Sensitive files
+sftp.txt
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# System
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/

@@ -10,19 +10,19 @@ export function Footer() {
           
           {/* Column 1: Brand */}
           <div className="space-y-6">
-             <Link href="/" className="flex items-center gap-3 group">
-                       <div className="w-30 h-30 rounded-full flex items-center justify-center">
-                         <img 
-                           src={`${import.meta.env.BASE_URL}images/logo-icon.png`} 
-                           alt="BAP Logo" 
-                           className="object-contain"
-                           onError={(e) => {
-                             e.currentTarget.style.display = 'none';
-                             e.currentTarget.parentElement!.innerHTML = '<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>';
-                           }}
-                         />
-                       </div>
-                     </Link>
+            <Link href="/" className="flex items-center gap-3">
+              
+                <img 
+                  src="/images/logo-icon.png" 
+                  alt="BAP Logo" 
+                  className="w-40 h-20 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = '<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>';
+                  }}
+                />
+              
+            </Link>
             <p className="text-white/80 text-lg leading-relaxed max-w-sm">
               Efficient Solutions So You Can Focus On Running Your Business!
             </p>

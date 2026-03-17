@@ -32,17 +32,15 @@ export function Navbar() {
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-30 h-30 rounded-full flex items-center justify-center">
-              <img 
-                src={`${import.meta.env.BASE_URL}images/logo-icon.png`} 
+            <img 
+                src="/images/logo-icon.png" 
                 alt="BAP Logo" 
-                className="object-contain"
+                className="w-40 h-20 object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                   e.currentTarget.parentElement!.innerHTML = '<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>';
                 }}
               />
-            </div>
           </Link>
 
           {/* Desktop Navigation */}

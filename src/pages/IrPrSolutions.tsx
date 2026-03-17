@@ -17,21 +17,6 @@ export default function IrPrSolutions() {
         </div>
       </section>
 
-      {/* Grid of services */}
-      {/* <section className="py-16 bg-secondary/20 border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-4 text-center">
-            {["Press Distribution", "EDGAR/SEDAR", "IR Room", "WebCast", "Analyst Center", "Stock Widgets", "PR Tools", "SEO"].map((tag, i) => (
-              <FadeIn key={i} delay={i * 0.05}>
-                <span className="px-6 py-3 bg-white text-heading font-bold rounded-full shadow-sm border border-border hover:border-accent hover:text-accent transition-colors cursor-default">
-                  {tag}
-                </span>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
       {/* Feature Sections alternating */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-32">
         
@@ -40,7 +25,7 @@ export default function IrPrSolutions() {
           <FadeIn direction="right">
             <div className="relative p-8 bg-blue-accent/5 rounded-3xl">
               <img 
-                src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/social-media.png" 
+                src="./images/statistics.svg" 
                 alt="SEO Brand PR" 
                 className="w-full h-auto object-contain"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}

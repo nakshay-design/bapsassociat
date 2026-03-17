@@ -18,7 +18,7 @@ export default function IrPrSolutions() {
       </section>
 
       {/* Grid of services */}
-      <section className="py-16 bg-secondary/20 border-b border-border">
+      {/* <section className="py-16 bg-secondary/20 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-4 text-center">
             {["Press Distribution", "EDGAR/SEDAR", "IR Room", "WebCast", "Analyst Center", "Stock Widgets", "PR Tools", "SEO"].map((tag, i) => (
@@ -30,7 +30,7 @@ export default function IrPrSolutions() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Feature Sections alternating */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-32">

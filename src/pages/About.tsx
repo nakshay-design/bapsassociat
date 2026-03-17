@@ -16,7 +16,7 @@ export default function About() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
-            <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight">
+            <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight text-white">
               Our goal is to get your company's story in front of the <span className="text-accent">Largest Audience</span> possible!
             </h1>
             <p className="text-xl text-white/80 max-w-2xl mx-auto">

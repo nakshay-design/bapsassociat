@@ -6,7 +6,7 @@ import { useMeta } from "@/hooks/useMeta";
 export default function IrPrSolutions() {
 
    useMeta(
-    "IR & PR Solutions for Business Growth | BAP & ",
+    "IR & PR Solutions for Business Growth | BAP & Associates",
     "Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!"
   );
 

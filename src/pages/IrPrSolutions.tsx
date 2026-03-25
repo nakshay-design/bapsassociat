@@ -103,7 +103,7 @@ export default function IrPrSolutions() {
           <FadeIn direction="right" className="lg:order-2">
             <div className="relative p-8 bg-secondary/50 rounded-3xl">
               <img 
-                src="/images/Global_Press_Distribution" 
+                src="/images/Global_Press_Distribution.png" 
                 alt="Press Distribution" 
                 className="w-full h-auto object-contain"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}

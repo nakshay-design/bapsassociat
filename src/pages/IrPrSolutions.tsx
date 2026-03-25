@@ -1,9 +1,9 @@
 import { FadeIn } from "@/components/FadeIn";
 
 export const metadata = {
-  title: "Investor Relations & PR Solutions",
+  title: "IR & PR Solutions for Business Growth | BAP & Associates",
   description:
-    "Drive investor engagement with expert IR & PR solutions. Boost visibility and grow globally.",
+    "Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!",
 };
 
 export default function IrPrSolutions() {

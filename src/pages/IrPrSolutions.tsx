@@ -1,5 +1,11 @@
 import { FadeIn } from "@/components/FadeIn";
 
+export const metadata = {
+  title: "Investor Relations & PR Solutions",
+  description:
+    "Drive investor engagement with expert IR & PR solutions. Boost visibility and grow globally.",
+};
+
 export default function IrPrSolutions() {
   return (
     <div className="w-full overflow-hidden bg-white">

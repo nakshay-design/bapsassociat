@@ -1,9 +1,17 @@
 import { FadeIn } from "@/components/FadeIn";
 import { CheckCircle2, Target, Users, Shield, TrendingUp } from "lucide-react";
-
+import { useMeta } from "@/hooks/useMeta";
 
 export default function About() {
+
+   useMeta(
+    "About BAP & Associates | Global PR & IR Experts",
+    "Discover BAP & Associates - experts in PR, investor relations & compliance. We help businesses gain visibility and grow globally. Learn more today!"
+  );
+
+
   return (
+    
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
       <section className="relative py-24 bg-primary text-white">

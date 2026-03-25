@@ -2,14 +2,16 @@ import { FadeIn } from "@/components/FadeIn";
 import { AccordionItem } from "@/components/ui/accordion";
 import { useState } from "react";
 import { Globe2, FileText, CheckCircle2, BarChart } from "lucide-react";
+import { useMeta } from "@/hooks/useMeta";
 
-export const metadata = {
-  title: "Global PR Distribution Services | BAP & Associates",
-  description:
-    "Expand your reach in 170+ countries with multilingual PR distribution. Connect with global audiences—start your campaign with us today!",
-};
 
 export default function GlobalOptions() {
+
+     useMeta(
+    "Global PR Distribution Services | BAP & Associates",
+    "Discover BAP & Associates - experts in PR, investor relations & compliance. We help businesses gain visibility and grow globally. Learn more today!"
+  );
+
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const faqs = [
@@ -34,6 +36,8 @@ export default function GlobalOptions() {
       a: "Simply reach out via our Contact page. One of our global strategy directors will evaluate your current footprint and design a customized expansion plan."
     }
   ];
+
+
 
   return (
     <div className="w-full overflow-hidden">

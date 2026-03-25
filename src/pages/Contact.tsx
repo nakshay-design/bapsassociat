@@ -13,6 +13,12 @@ interface ContactFormValues {
   message: string;
 }
 
+export const metadata = {
+  title: "Contact US | BAP & Associates",
+  description:
+    "Get in touch for expert PR, investor relations & compliance solutions. Let’s grow your business globally—contact BAP & Associates now!",
+};
+
 export default function Contact() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormValues>();
   const submitMutation = useSubmitContact();

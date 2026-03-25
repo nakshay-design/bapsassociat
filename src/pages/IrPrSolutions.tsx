@@ -103,7 +103,7 @@ export default function IrPrSolutions() {
           <FadeIn direction="right" className="lg:order-2">
             <div className="relative p-8 bg-secondary/50 rounded-3xl">
               <img 
-                src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/road-site.png" 
+                src="/images/Global_Press_Distribution" 
                 alt="Press Distribution" 
                 className="w-full h-auto object-contain"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}

@@ -158,7 +158,7 @@ export default function IrPrSolutions() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <FadeIn direction="right">
             <img 
-              src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/stats.png" 
+              src="/images/Analytics.png" 
               alt="Analytics and Adwords" 
               className="w-full h-auto rounded-3xl shadow-xl"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}

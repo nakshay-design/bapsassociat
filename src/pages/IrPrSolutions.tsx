@@ -60,7 +60,7 @@ export default function IrPrSolutions() {
           <FadeIn direction="right" className="lg:order-2">
             <div className="relative p-8 bg-accent/5 rounded-3xl">
               <img 
-                src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/se-o.png" 
+                src="/images/Hat_SEO.png" 
                 alt="White Hat SEO" 
                 className="w-full h-auto object-contain"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -83,7 +83,7 @@ export default function IrPrSolutions() {
           <FadeIn direction="right">
             <div className="relative p-8 bg-primary/5 rounded-3xl">
               <img 
-                src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/social.png" 
+                src="/images/Brand_Management.png" 
                 alt="Brand Management" 
                 className="w-full h-auto object-contain"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}

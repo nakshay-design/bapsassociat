@@ -68,10 +68,10 @@ export default function About() {
               {/* office team meeting */}
               <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Team" className="rounded-3xl shadow-lg w-full h-64 object-cover" />
               {/* handshake business deal */}
-              <img src="https://pixabay.com/get/g6345bba01ae0f97fce7e1f70c192c966c7bfcb9fa88986875192305177fa3c12adb32a43cca3eaa548cd29e4eb3d8436d3230d664f68dbe8f518fdff0a851a8a_1280.jpg" alt="Partnership" className="rounded-3xl shadow-lg w-full h-64 object-cover mt-8" />
+              <img src="/images/img_About2.png" alt="Partnership" className="rounded-3xl shadow-lg w-full h-64 object-cover mt-8" />
             </FadeIn>
           </div>
-        </div>
+        </div> 
       </section>
 
       {/* Values & Mission */}

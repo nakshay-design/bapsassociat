@@ -1,12 +1,16 @@
 import { FadeIn } from "@/components/FadeIn";
+import { useMeta } from "@/hooks/useMeta";
 
-export const metadata = {
-  title: "IR & PR Solutions for Business Growth | BAP & Associates",
-  description:
-    "Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!",
-};
+
 
 export default function IrPrSolutions() {
+
+   useMeta(
+    "IR & PR Solutions for Business Growth | BAP & Associates",
+    "Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!"
+  );
+
+
   return (
     <div className="w-full overflow-hidden bg-white">
       {/* Hero */}

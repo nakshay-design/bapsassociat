@@ -9,7 +9,7 @@ export default function GlobalOptions() {
 
      useMeta(
     "Global PR Distribution Services | BAP & Associates",
-    "Discover BAP & Associates - experts in PR, investor relations & compliance. We help businesses gain visibility and grow globally. Learn more today!"
+    "Expand your reach in 170+ countries with multilingual PR distribution. Connect with global audiences—start your campaign with us today!"
   );
 
   const [openFaq, setOpenFaq] = useState<number | null>(0);

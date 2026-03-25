@@ -8,10 +8,10 @@ export default function IrPrSolutions() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight text-white">
-             IR & PR Solutions for Business Growth | <br/> <span className="text-accent"> BAP & Associates</span>
+              Investor Relations & <br/> <span className="text-accent">PR Solutions</span>
             </h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-             Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!
+              Efficient solutions that empower your brand's voice and ensure flawless regulatory compliance across capital markets.
             </p>
           </FadeIn>
         </div>

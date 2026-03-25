@@ -45,10 +45,10 @@ export default function GlobalOptions() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight text-white">
-             Global PR Distribution Services |  <span className="text-accent"> BAP & Associates </span>
+              Efficient Solutions So You Can Focus On <span className="text-accent">Running Your Business!</span>
             </h1>
             <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              Expand your reach in 170+ countries with multilingual PR distribution. Connect with global audiences—start your campaign with us today!
+              Global Options & Distribution
             </p>
           </FadeIn>
         </div>

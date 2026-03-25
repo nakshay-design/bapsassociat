@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FadeIn } from "@/components/FadeIn";
 import { Diamond, CheckSquare, MessageSquare, ChevronRight, CheckCircle2 } from "lucide-react";
+import { useMeta } from "@/hooks/useMeta";
+
 
 export default function Home() {
+
+   useMeta(
+    "PR & Investor Relations Firm UK | BAP & Associates",
+    "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
+  );
+
   return (
     <div className="w-full overflow-hidden">
       {/* Hero Section */}

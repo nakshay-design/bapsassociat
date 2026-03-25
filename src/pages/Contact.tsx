@@ -5,6 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useSubmitContact } from "@/hooks/use-contact";
+import { useMeta } from "@/hooks/useMeta";
+
 
 interface ContactFormValues {
   name: string;
@@ -13,11 +15,7 @@ interface ContactFormValues {
   message: string;
 }
 
-export const metadata = {
-  title: "Contact US | BAP & Associates",
-  description:
-    "Get in touch for expert PR, investor relations & compliance solutions. Let’s grow your business globally—contact BAP & Associates now!",
-};
+
 
 export default function Contact() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormValues>();
@@ -28,6 +26,12 @@ export default function Contact() {
       onSuccess: () => reset()
     });
   };
+
+    useMeta(
+    "Contact US | BAP & Associates",
+    "Get in touch for expert PR, investor relations & compliance solutions. Let’s grow your business globally—contact BAP & Associates now!"
+  );
+
 
   return (
     <div className="w-full bg-white">

@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 
-export const useMeta = (title: string, description: string) => {
+export function useMeta(title: string, description: string) {
   useEffect(() => {
     document.title = title;
 
     let meta = document.querySelector("meta[name='description']");
-
     if (!meta) {
       meta = document.createElement("meta");
       meta.setAttribute("name", "description");
@@ -14,4 +13,4 @@ export const useMeta = (title: string, description: string) => {
 
     meta.setAttribute("content", description);
   }, [title, description]);
-};
+}

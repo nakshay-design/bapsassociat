@@ -1,5 +1,6 @@
 import { FadeIn } from "@/components/FadeIn";
 import { CheckCircle2, Target, Users, Shield, TrendingUp } from "lucide-react";
+import Head from "next/head";
 
 
 export default function About() {

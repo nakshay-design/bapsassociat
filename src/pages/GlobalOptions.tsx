@@ -3,6 +3,12 @@ import { AccordionItem } from "@/components/ui/accordion";
 import { useState } from "react";
 import { Globe2, FileText, CheckCircle2, BarChart } from "lucide-react";
 
+export const metadata = {
+  title: "Global PR Distribution Services | BAP & Associates",
+  description:
+    "Expand your reach in 170+ countries with multilingual PR distribution. Connect with global audiences—start your campaign with us today!",
+};
+
 export default function GlobalOptions() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 

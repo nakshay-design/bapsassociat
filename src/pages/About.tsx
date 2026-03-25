@@ -4,15 +4,6 @@ import { CheckCircle2, Target, Users, Shield, TrendingUp } from "lucide-react";
 
 export default function About() {
   return (
-    <>
-
-     <Head>
-        <title>About BAP & Associates | Global PR & IR Experts</title>
-        <meta
-          name="description"
-          content="Discover BAP & Associates - experts in PR, investor relations & compliance. We help businesses gain visibility and grow globally. Learn more today!"
-        />
-      </Head>
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
       <section className="relative py-24 bg-primary text-white">
@@ -136,6 +127,5 @@ export default function About() {
         </div>
       </section>
     </div>
-    </>
   );
 }

@@ -35,7 +35,7 @@ export default function IrPrSolutions() {
           <FadeIn direction="right">
             <div className="relative p-8 bg-blue-accent/5 rounded-3xl">
               <img 
-                src="./images/statistics.svg" 
+                src="/images/statistics.svg" 
                 alt="SEO Brand PR" 
                 className="w-full h-auto object-contain"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}

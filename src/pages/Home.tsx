@@ -251,7 +251,7 @@ useEffect(() => {
                         alt={service.title}
                         className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
                       onError={(e) => {
-                        e.currentTarget.src = "https://via.placeholder.com/100";
+                        e.currentTarget.src = "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18";
                       }}
                       />
 

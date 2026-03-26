@@ -209,13 +209,13 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { title: "Bookkeeping", img: "1.png" },
-              { title: "Payroll Services", img: "Asset-06.png" },
-              { title: "Tax Planning", img: "Asset-07-150x150.png" },
-              { title: "Audit & Assurance", img: "Asset-08-1-150x150.png" },
-              { title: "Financial Statement", img: "Asset-09-150x150.png" },
-              { title: "Business Advisory", img: "Asset-011-150x150.png" },
-              { title: "Tech Consulting", img: "Asset-010-150x150.png" },
-              { title: "Outsourced CFO", img: "Asset-012-150x150.png" }
+              { title: "Payroll Services", img: "2.png" },
+              { title: "Tax Planning", img: "3.png" },
+              { title: "Audit & Assurance", img: "4.png" },
+              { title: "Financial Statement", img: "5.png" },
+              { title: "Business Advisory", img: "6.png" },
+              { title: "Tech Consulting", img: "7.png" },
+              { title: "Outsourced CFO", img: "8.png" }
             ].map((service, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="flex flex-col items-center text-center group cursor-pointer">

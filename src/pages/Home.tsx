@@ -19,35 +19,29 @@ export default function Home() {
   );
 const [services, setServices] = useState<Service[]>([]);
 
-
 useEffect(() => {
   fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
     .then(res => res.json())
     .then(data => {
+
       const acf = data.acf || {};
 
-      const dynamicServices = [
-        { title: "Bookkeeping", img: acf?.icon_1 || "" },
-        { title: "Payroll Services", img: acf?.icon_2 || "" },
-        { title: "Tax Planning", img: acf?.icon_3 || "" },
-        { title: "Audit & Assurance", img: acf?.icon_4 || "" },
-        { title: "Financial Statement", img: acf?.icon_5 || "" },
-        { title: "Business Advisory", img: acf?.icon_6 || "" },
-        { title: "Tech Consulting", img: acf?.icon_7 || "" },
-        { title: "Outsourced CFO", img: acf?.icon_8 || "" }
-      ];
+      const servicesData = [
+        { title: "Bookkeeping", img: acf.icon_1 },
+        { title: "Payroll Services", img: acf.icon_2 },
+        { title: "Tax Planning", img: acf.icon_3 },
+        { title: "Audit & Assurance", img: acf.icon_4 },
+        { title: "Financial Statement", img: acf.icon_5 },
+        { title: "Business Advisory", img: acf.icon_6 },
+        { title: "Tech Consulting", img: acf.icon_7 },
+        { title: "Outsourced CFO", img: acf.icon_8 }
+      ].filter(item => item.img); // 🔥 VERY IMPORTANT
 
-      console.log("SERVICES:", dynamicServices);
+      console.log("FINAL SERVICES:", servicesData);
 
-     setServices([
-  { title: "Test 1", img: "https://via.placeholder.com/100" },
-  { title: "Test 2", img: "https://via.placeholder.com/100" }
-]);
-
-    })
-    .catch(err => console.error(err));
+      setServices(servicesData);
+    });
 }, []);
-   
 
   return (
     <div className="w-full overflow-hidden">

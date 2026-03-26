@@ -24,24 +24,28 @@ useEffect(() => {
   fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
     .then(res => res.json())
     .then(data => {
-
       const acf = data.acf || {};
+      
+      // Function to extract URL whether it's a string or an ACF object
+      const getImg = (field: any) => {
+        if (!field) return "/default.png";
+        return typeof field === 'string' ? field : field.url;
+      };
 
- const servicesData = [
-  { title: "Bookkeeping", img: acf.icon_1 || "/default.png" },
-  { title: "Payroll Services", img: acf.icon_2 || "/default.png" },
-  { title: "Tax Planning", img: acf.icon_3 || "/default.png" },
-  { title: "Audit & Assurance", img: acf.icon_4 || "/default.png" },
-  { title: "Financial Statement", img: acf.icon_5 || "/default.png" },
-  { title: "Business Advisory", img: acf.icon_6 || "/default.png" },
-  { title: "Tech Consulting", img: acf.icon_7 || "/default.png" },
-  { title: "Outsourced CFO", img: acf.icon_8 || "/default.png" }
-];
-
-      console.log("FINAL SERVICES:", servicesData);
+      const servicesData = [
+        { title: "Bookkeeping", img: getImg(acf.icon_1) },
+        { title: "Payroll Services", img: getImg(acf.icon_2) },
+        { title: "Tax Planning", img: getImg(acf.icon_3) },
+        { title: "Audit & Assurance", img: getImg(acf.icon_4) },
+        { title: "Financial Statement", img: getImg(acf.icon_5) },
+        { title: "Business Advisory", img: getImg(acf.icon_6) },
+        { title: "Tech Consulting", img: getImg(acf.icon_7) },
+        { title: "Outsourced CFO", img: getImg(acf.icon_8) }
+      ];
 
       setServices(servicesData);
-    });
+    })
+    .catch(err => console.error("Fetch error:", err));
 }, []);
 
   return (

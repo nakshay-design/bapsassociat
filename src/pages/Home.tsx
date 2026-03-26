@@ -39,7 +39,11 @@ useEffect(() => {
 
       console.log("SERVICES:", dynamicServices);
 
-      setServices(dynamicServices);
+     setServices([
+  { title: "Test 1", img: "https://via.placeholder.com/100" },
+  { title: "Test 2", img: "https://via.placeholder.com/100" }
+]);
+
     })
     .catch(err => console.error(err));
 }, []);
@@ -251,7 +255,7 @@ useEffect(() => {
                         e.currentTarget.src = "https://via.placeholder.com/100";
                       }}
                       />
-                      
+
                   </div>
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>

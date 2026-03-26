@@ -208,7 +208,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { title: "Bookkeeping", img: "Asset-05.png" },
+              { title: "Bookkeeping", img: "/images/icon/1.png" },
               { title: "Payroll Services", img: "Asset-06.png" },
               { title: "Tax Planning", img: "Asset-07-150x150.png" },
               { title: "Audit & Assurance", img: "Asset-08-1-150x150.png" },

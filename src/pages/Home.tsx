@@ -28,31 +28,31 @@ const [services, setServices] = useState<Service[]>([]);
   },
   {
     title: "Payroll Services",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/2.png"
+    img: "2.png"
   },
   {
     title: "Tax Planning",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/3.png"
+    img: "3.png"
   },
   {
     title: "Audit & Assurance",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/4.png"
+    img: "4.png"
   },
   {
     title: "Financial Statement",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/5.png"
+    img: "5.png"
   },
   {
     title: "Business Advisory",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/6.png"
+    img: "6.png"
   },
   {
     title: "Tech Consulting",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/7.png"
+    img: "7.png"
   },
   {
     title: "Outsourced CFO",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/8.png"
+    img: "8.png"
   }
 ];
 
@@ -264,7 +264,7 @@ useEffect(() => {
   alt={service.title}
   className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
   onError={(e) => {
-    e.currentTarget.src = "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/1.png";
+    e.currentTarget.src = "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/";
   }}
 />
                   </div>

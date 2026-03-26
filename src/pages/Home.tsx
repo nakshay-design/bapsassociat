@@ -208,7 +208,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { title: "Bookkeeping", img: "<img src='/images/icon/1.png' alt='icon'/>" },
+              { title: "Bookkeeping", img: "1.png" },
               { title: "Payroll Services", img: "Asset-06.png" },
               { title: "Tax Planning", img: "Asset-07-150x150.png" },
               { title: "Audit & Assurance", img: "Asset-08-1-150x150.png" },
@@ -221,7 +221,7 @@ export default function Home() {
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
                     <img 
-                      src={`https://www.bapassociates.co.uk/wp-content/uploads/2025/03/${service.img}`} 
+                      src={`/images/icon/${service.img}`} 
                       alt={service.title}
                       className="w-full h-full object-contain"
                       onError={(e) => {

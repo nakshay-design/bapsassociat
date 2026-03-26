@@ -12,7 +12,6 @@ type Service = {
   img: string;
 };
 
-
 export default function Home() {
 
    useMeta(
@@ -21,26 +20,30 @@ export default function Home() {
   );
 const [services, setServices] = useState<Service[]>([]);
 
-fetch("https://api.allorigins.win/get?url=https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
-  .then(res => res.json())
-  .then(data => {
-    const parsed = JSON.parse(data.contents);
+useEffect(() => {
+  fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
+    .then(res => res.json())
+    .then(data => {
 
-    const acf = parsed.acf || {};
+      const acf = data.acf || {};
 
-    const servicesData = [
-      { title: "Bookkeeping", img: acf.icon_1 },
-      { title: "Payroll Services", img: acf.icon_2 },
-      { title: "Tax Planning", img: acf.icon_3 },
-      { title: "Audit & Assurance", img: acf.icon_4 },
-      { title: "Financial Statement", img: acf.icon_5 },
-      { title: "Business Advisory", img: acf.icon_6 },
-      { title: "Tech Consulting", img: acf.icon_7 },
-      { title: "Outsourced CFO", img: acf.icon_8 }
-    ].filter(item => item.img);
+      const servicesData = [
+        { title: "Bookkeeping", img: acf.icon_1 },
+        { title: "Payroll Services", img: acf.icon_2 },
+        { title: "Tax Planning", img: acf.icon_3 },
+        { title: "Audit & Assurance", img: acf.icon_4 },
+        { title: "Financial Statement", img: acf.icon_5 },
+        { title: "Business Advisory", img: acf.icon_6 },
+        { title: "Tech Consulting", img: acf.icon_7 },
+        { title: "Outsourced CFO", img: acf.icon_8 }
+      ].filter(item => item.img); // 🔥 IMPORTANT
 
-    setServices(servicesData);
-  });
+      console.log("SERVICES:", servicesData);
+
+      setServices(servicesData);
+    });
+}, []);
+
 
 
   return (
@@ -255,10 +258,8 @@ fetch("https://api.allorigins.win/get?url=https://my.wordpress.net/scope:default
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>
               </FadeIn>
-              ))
-) : (
-  <p className="col-span-4 text-center">Loading...</p>
-)}
+              
+            ))}
           </div>
         </div>
       </section>

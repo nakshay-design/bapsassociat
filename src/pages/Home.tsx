@@ -24,7 +24,7 @@ const [services, setServices] = useState<Service[]>([]);
  const servicesData = [
   {
     title: "Bookkeeping",
-    img: "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/1.png"
+    img: "1.png"
   },
   {
     title: "Payroll Services",
@@ -264,7 +264,7 @@ useEffect(() => {
   alt={service.title}
   className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
   onError={(e) => {
-    e.currentTarget.src = "/images/icon/default.png";
+    e.currentTarget.src = "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/";
   }}
 />
                   </div>

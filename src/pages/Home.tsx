@@ -244,13 +244,14 @@ useEffect(() => {
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
                     <img 
-  src={service.img}
-  alt={service.title}
-  className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
- onError={(e) => {
-  e.currentTarget.src = "https://via.placeholder.com/100";
-}}
-/>
+                        src={service.img}
+                        alt={service.title}
+                        className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://via.placeholder.com/100";
+                      }}
+                      />
+                      
                   </div>
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>

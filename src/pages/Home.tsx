@@ -6,6 +6,7 @@ import { Diamond, CheckSquare, MessageSquare, ChevronRight, CheckCircle2 } from 
 import { useMeta } from "@/hooks/useMeta";
 import { useEffect, useState } from "react";
 
+
 type Service = {
   title: string;
   img: string;
@@ -26,16 +27,16 @@ useEffect(() => {
 
       const acf = data.acf || {};
 
-      const servicesData = [
-        { title: "Bookkeeping", img: acf.icon_1 },
-        { title: "Payroll Services", img: acf.icon_2 },
-        { title: "Tax Planning", img: acf.icon_3 },
-        { title: "Audit & Assurance", img: acf.icon_4 },
-        { title: "Financial Statement", img: acf.icon_5 },
-        { title: "Business Advisory", img: acf.icon_6 },
-        { title: "Tech Consulting", img: acf.icon_7 },
-        { title: "Outsourced CFO", img: acf.icon_8 }
-      ].filter(item => item.img); // 🔥 VERY IMPORTANT
+ const servicesData = [
+  { title: "Bookkeeping", img: acf.icon_1 || "/default.png" },
+  { title: "Payroll Services", img: acf.icon_2 || "/default.png" },
+  { title: "Tax Planning", img: acf.icon_3 || "/default.png" },
+  { title: "Audit & Assurance", img: acf.icon_4 || "/default.png" },
+  { title: "Financial Statement", img: acf.icon_5 || "/default.png" },
+  { title: "Business Advisory", img: acf.icon_6 || "/default.png" },
+  { title: "Tech Consulting", img: acf.icon_7 || "/default.png" },
+  { title: "Outsourced CFO", img: acf.icon_8 || "/default.png" }
+];
 
       console.log("FINAL SERVICES:", servicesData);
 

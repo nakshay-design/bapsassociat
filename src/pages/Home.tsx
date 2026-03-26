@@ -17,7 +17,7 @@ export default function Home() {
     "PR & Investor Relations Firm UK | BAP & Associates",
     "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
   );
-const [services, setServices] = useState<Service[]>([])
+const [services, setServices] = useState<Service[]>([]);
 
 
 useEffect(() => {

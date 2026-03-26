@@ -6,88 +6,181 @@ import { Diamond, CheckSquare, MessageSquare, ChevronRight, CheckCircle2 } from 
 import { useMeta } from "@/hooks/useMeta";
 import { useEffect, useState } from "react";
 
-
 type Service = {
   title: string;
-  img: string;
+  img: string | null; // null = no icon, show placeholder UI instead
 };
 
-export default function Home() {
+const SERVICE_LABELS = [
+  "Bookkeeping",
+  "Payroll Services",
+  "Tax Planning",
+  "Audit & Assurance",
+  "Financial Statement",
+  "Business Advisory",
+  "Tech Consulting",
+  "Outsourced CFO",
+];
 
-   useMeta(
+// ─── Skeleton shown while loading ────────────────────────────────────────────
+function ServicesSkeleton() {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="flex flex-col items-center gap-4 animate-pulse">
+          <div className="w-28 h-28 rounded-full bg-gray-200" />
+          <div className="h-4 w-24 bg-gray-200 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Single icon card ─────────────────────────────────────────────────────────
+function ServiceCard({ service, index }: { service: Service; index: number }) {
+  return (
+    <FadeIn delay={index * 0.08}>
+      <div className="flex flex-col items-center text-center group cursor-pointer">
+        <div
+          className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6
+                     transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg
+                     group-hover:bg-white border border-transparent group-hover:border-border"
+        >
+          {service.img ? (
+            <img
+              src={service.img}
+              alt={service.title}
+              className="w-full h-full object-contain transition duration-300 group-hover:scale-110"
+              // Prevent infinite loop: clear handler after first failure
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.style.display = "none";
+                // Show a text fallback inside the circle
+                const span = document.createElement("span");
+                span.className = "text-xs font-bold text-accent";
+                span.textContent = service.title.charAt(0);
+                e.currentTarget.parentElement?.appendChild(span);
+              }}
+            />
+          ) : (
+            // No URL at all — show first letter as fallback
+            <span className="text-2xl font-black text-accent">
+              {service.title.charAt(0)}
+            </span>
+          )}
+        </div>
+        <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">
+          {service.title}
+        </h4>
+      </div>
+    </FadeIn>
+  );
+}
+
+export default function Home() {
+  useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",
     "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
   );
-const [services, setServices] = useState<Service[]>([]);
 
-useEffect(() => {
-  fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
-    .then(res => res.json())
-    .then(data => {
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-      const acf = data.acf || {};
+  useEffect(() => {
+    // AbortController lets us cancel the fetch if the component unmounts
+    const controller = new AbortController();
 
-      const servicesData = [
-        { title: "Bookkeeping", img: acf.icon_1 },
-        { title: "Payroll Services", img: acf.icon_2 },
-        { title: "Tax Planning", img: acf.icon_3 },
-        { title: "Audit & Assurance", img: acf.icon_4 },
-        { title: "Financial Statement", img: acf.icon_5 },
-        { title: "Business Advisory", img: acf.icon_6 },
-        { title: "Tech Consulting", img: acf.icon_7 },
-        { title: "Outsourced CFO", img: acf.icon_8 }
-      ].filter(item => item.img); // 🔥 IMPORTANT
+    /**
+     * ENDPOINT DECISION
+     * ─────────────────
+     * ✅ Use the native WP REST API — it exposes ACF fields.
+     * ❌ Do NOT use public-api.wordpress.com — that strips ACF.
+     * ❌ Do NOT use allorigins.win proxy — unreliable in production.
+     *
+     * If you still get a CORS error here, add to your Next.js config:
+     *   async rewrites() {
+     *     return [{ source: '/api/wp-page', destination: 'https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18' }];
+     *   }
+     * …and change the URL below to '/api/wp-page'.
+     */
+    const WP_API_URL =
+      "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18";
 
-      console.log("SERVICES:", servicesData);
+    fetch(WP_API_URL, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error(`API returned HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        // Safely read ACF — works whether acf is an object or missing entirely
+        const acf: Record<string, string> = data?.acf ?? {};
 
-      setServices(servicesData);
-    });
-}, []);
+        const servicesData: Service[] = SERVICE_LABELS.map((title, i) => ({
+          title,
+          // Use the ACF URL if it's a non-empty string; otherwise null
+          img: typeof acf[`icon_${i + 1}`] === "string" && acf[`icon_${i + 1}`]
+            ? acf[`icon_${i + 1}`]
+            : null,
+        }));
 
+        setServices(servicesData);
+        setError(null);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") return; // component unmounted — ignore
 
+        console.error("[Services fetch failed]", err);
+        setError("Could not load service icons. Showing labels only.");
+
+        // Graceful degradation: still show all 8 services, just without icons
+        setServices(SERVICE_LABELS.map((title) => ({ title, img: null })));
+      })
+      .finally(() => setLoading(false));
+
+    return () => controller.abort();
+  }, []); // ← empty array = run exactly once on mount
 
   return (
     <div className="w-full overflow-hidden">
-      {/* Hero Section */}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[90vh] flex items-center justify-center bg-primary">
         <div className="absolute inset-0 overflow-hidden">
-          {/* corporate consulting background image */}
-          <img 
-            src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg" 
-            alt="Business consulting meeting" 
+          <img
+            src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg"
+            alt="Business consulting meeting"
             className="w-full h-full object-cover opacity-20 scale-105 animate-[pulse_20s_ease-in-out_infinite_alternate]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent" />
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
             <span className="inline-block py-1.5 px-4 rounded-full bg-accent/20 text-accent font-bold tracking-wider text-sm mb-6 border border-accent/30">
               STRATEGIC MANAGEMENT & INVESTOR RELATIONS
             </span>
           </FadeIn>
-          
           <FadeIn delay={0.2}>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight">
               Maximizing Reach and <br className="hidden sm:block" />
               Growth for Your Business.
             </h1>
           </FadeIn>
-          
           <FadeIn delay={0.4}>
             <p className="text-2xl sm:text-3xl text-accent font-light mb-8">
               In Front of the Large Audience
             </p>
             <p className="text-lg text-white/80 max-w-3xl mx-auto mb-10 leading-relaxed">
-              We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally.
+              We provide expert business consulting and strategic distribution
+              solutions to ensure your company's story reaches the right
+              investors globally.
             </p>
           </FadeIn>
-          
           <FadeIn delay={0.6}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
                 <Button size="lg" variant="accent" className="group w-full sm:w-auto">
-                  Get Started 
+                  Get Started
                   <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -101,15 +194,20 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Services Overview Section */}
+      {/* ── Services Overview ─────────────────────────────────────────────── */}
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-display font-bold text-heading mb-6">
-              Efficient Solution So You Can Focus On <br className="hidden md:block"/>
+              Efficient Solution So You Can Focus On{" "}
+              <br className="hidden md:block" />
               <span className="text-accent relative inline-block">
                 RUNNING YOUR BUSINESS!
-                <svg className="absolute w-full h-3 -bottom-1 left-0 text-accent opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
+                <svg
+                  className="absolute w-full h-3 -bottom-1 left-0 text-accent opacity-50"
+                  viewBox="0 0 100 10"
+                  preserveAspectRatio="none"
+                >
                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="transparent" />
                 </svg>
               </span>
@@ -138,7 +236,7 @@ useEffect(() => {
             {/* Card 2 */}
             <FadeIn delay={0.2} className="h-full">
               <div className="bg-primary h-full p-8 rounded-3xl shadow-xl hover:-translate-y-2 transition-all duration-300 text-white relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700" />
                 <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-8 text-accent">
                   <CheckSquare className="w-8 h-8" />
                 </div>
@@ -175,16 +273,15 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Your Growth Section */}
+      {/* ── Your Growth ───────────────────────────────────────────────────── */}
       <section className="py-24 bg-secondary/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn direction="right">
               <div className="relative">
-                {/* modern office building facade */}
-                <img 
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Modern office" 
+                <img
+                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop"
+                  alt="Modern office"
                   className="rounded-3xl shadow-2xl object-cover h-[500px] w-full"
                 />
                 <div className="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-xl hidden md:block max-w-xs border border-border">
@@ -200,14 +297,18 @@ useEffect(() => {
                 </div>
               </div>
             </FadeIn>
-            
+
             <FadeIn direction="left">
               <h2 className="text-4xl lg:text-5xl font-display font-bold text-heading mb-6">
-                Your Growth, <br/>
+                Your Growth, <br />
                 <span className="text-blue-accent">Our Expertise.</span>
               </h2>
               <p className="text-lg text-foreground mb-8 leading-relaxed">
-                At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth.
+                At BAP & Associates LIMITED, we believe that true success is
+                built on a foundation of strategic planning, impeccable
+                execution, and transparent communication. Our tailored solutions
+                are designed not just to meet your immediate needs, but to
+                propel your business into its next phase of exponential growth.
               </p>
               <ul className="space-y-4 mb-10">
                 {["Global Distribution Networks", "Comprehensive Financial Reporting", "Strategic Brand Management"].map((item, i) => (
@@ -227,7 +328,7 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Services Grid Section */}
+      {/* ── Services Grid (ACF icons) ─────────────────────────────────────── */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
@@ -235,49 +336,47 @@ useEffect(() => {
               Certified public accountants in United States
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Delivering premium financial, consulting, and advisory services to ensure full compliance and strategic advantage.
+              Delivering premium financial, consulting, and advisory services to
+              ensure full compliance and strategic advantage.
             </p>
           </FadeIn>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {services.length > 0 ? (
-              services.map((service, i) => (
-              <FadeIn key={i} delay={i * 0.1}>
-                <div className="flex flex-col items-center text-center group cursor-pointer">
-                  <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
-                    <img 
-                        src={service.img}
-                        alt={service.title}
-                        className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
-                      onError={(e) => {
-                        e.currentTarget.src = "https://via.placeholder.com/100";
-                      }}
-                      />
+          {/* Loading skeleton */}
+          {loading && <ServicesSkeleton />}
 
-                  </div>
-                  <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
-                </div>
-              </FadeIn>
-              
-            ))}
-          </div>
+          {/* Non-blocking warning — grid still renders below */}
+          {error && !loading && (
+            <p className="text-center text-amber-600 text-sm mb-8">{error}</p>
+          )}
+
+          {/* ✅ Grid always renders once loading is done */}
+          {!loading && services.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {services.map((service, i) => (
+                <ServiceCard key={i} service={service} index={i} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Subscribe Section */}
+      {/* ── Subscribe ─────────────────────────────────────────────────────── */}
       <section className="py-20 bg-accent relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -ml-20 -mb-20"></div>
-        
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -ml-20 -mb-20" />
+
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
             <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-8">
               Let Us Know How We Can Assist Your Company
             </h2>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!'); }}>
-              <Input 
-                type="email" 
-                placeholder="Enter your email address" 
+            <form
+              className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto"
+              onSubmit={(e) => { e.preventDefault(); alert("Subscribed!"); }}
+            >
+              <Input
+                type="email"
+                placeholder="Enter your email address"
                 className="h-14 text-lg border-white/20 bg-white/10 text-white placeholder:text-white/60 focus-visible:ring-white/30 focus-visible:border-white"
                 required
               />
@@ -289,13 +388,15 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Partners Section */}
+      {/* ── Partners ──────────────────────────────────────────────────────── */}
       <section className="py-16 bg-white border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
-            <h3 className="text-2xl font-display font-bold text-heading mb-10">Our Partnership with Major Media Outlets</h3>
+            <h3 className="text-2xl font-display font-bold text-heading mb-10">
+              Our Partnership with Major Media Outlets
+            </h3>
             <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-              {['Google', 'Yahoo', 'MarketWatch', 'Bloomberg', 'MSN'].map((partner, i) => (
+              {["Google", "Yahoo", "MarketWatch", "Bloomberg", "MSN"].map((partner, i) => (
                 <div key={i} className="text-2xl md:text-4xl font-black font-display tracking-tighter text-muted-foreground hover:text-primary transition-colors">
                   {partner}
                 </div>
@@ -304,7 +405,6 @@ useEffect(() => {
           </FadeIn>
         </div>
       </section>
-
     </div>
   );
 }

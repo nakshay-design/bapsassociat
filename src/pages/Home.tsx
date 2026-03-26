@@ -57,7 +57,7 @@ useEffect(() => {
           <img 
             src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg" 
             alt="Business consulting meeting" 
-            className="w-full h-full object-contain opacity-20 scale-105 animate-[pulse_20s_ease-in-out_infinite_alternate]"
+            className="w-full h-full object-cover opacity-20 scale-105 animate-[pulse_20s_ease-in-out_infinite_alternate]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
         </div>
@@ -187,7 +187,7 @@ useEffect(() => {
                 <img 
                   src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" 
                   alt="Modern office" 
-                  className="rounded-3xl shadow-2xl object-contain h-[500px] w-full"
+                  className="rounded-3xl shadow-2xl object-cover h-[500px] w-full"
                 />
                 <div className="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-xl hidden md:block max-w-xs border border-border">
                   <div className="flex items-center gap-4 mb-4">

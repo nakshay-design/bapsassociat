@@ -24,20 +24,20 @@ useEffect(() => {
   fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
     .then(res => res.json())
     .then(data => {
-      console.log("ACF DATA:", data.acf);
-
-      const acf = data.acf;
+      const acf = data.acf || {};
 
       const dynamicServices = [
-        { title: "Bookkeeping", img: acf.icon_1 },
-        { title: "Payroll Services", img: acf.icon_2 },
-        { title: "Tax Planning", img: acf.icon_3 },
-        { title: "Audit & Assurance", img: acf.icon_4 },
-        { title: "Financial Statement", img: acf.icon_5 },
-        { title: "Business Advisory", img: acf.icon_6 },
-        { title: "Tech Consulting", img: acf.icon_7 },
-        { title: "Outsourced CFO", img: acf.icon_8 }
+        { title: "Bookkeeping", img: acf?.icon_1 || "" },
+        { title: "Payroll Services", img: acf?.icon_2 || "" },
+        { title: "Tax Planning", img: acf?.icon_3 || "" },
+        { title: "Audit & Assurance", img: acf?.icon_4 || "" },
+        { title: "Financial Statement", img: acf?.icon_5 || "" },
+        { title: "Business Advisory", img: acf?.icon_6 || "" },
+        { title: "Tech Consulting", img: acf?.icon_7 || "" },
+        { title: "Outsourced CFO", img: acf?.icon_8 || "" }
       ];
+
+      console.log("SERVICES:", dynamicServices);
 
       setServices(dynamicServices);
     })

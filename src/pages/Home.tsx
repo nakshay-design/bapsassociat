@@ -221,7 +221,8 @@ export default function Home() {
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
                     <img 
-                      src={`/images/icon/${service.img}`} 
+                      // src={`/images/icon/${service.img}`} 
+                      src={`https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/${service.img}`}
                       alt={service.title}
                       className="w-full h-full object-contain"
                       onError={(e) => {

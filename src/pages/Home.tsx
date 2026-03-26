@@ -24,29 +24,27 @@ useEffect(() => {
   fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
     .then(res => res.json())
     .then(data => {
+
       const acf = data.acf || {};
-      
-      // Function to extract URL whether it's a string or an ACF object
-      const getImg = (field: any) => {
-        if (!field) return "/default.png";
-        return typeof field === 'string' ? field : field.url;
-      };
 
       const servicesData = [
-        { title: "Bookkeeping", img: getImg(acf.icon_1) },
-        { title: "Payroll Services", img: getImg(acf.icon_2) },
-        { title: "Tax Planning", img: getImg(acf.icon_3) },
-        { title: "Audit & Assurance", img: getImg(acf.icon_4) },
-        { title: "Financial Statement", img: getImg(acf.icon_5) },
-        { title: "Business Advisory", img: getImg(acf.icon_6) },
-        { title: "Tech Consulting", img: getImg(acf.icon_7) },
-        { title: "Outsourced CFO", img: getImg(acf.icon_8) }
-      ];
+        { title: "Bookkeeping", img: acf.icon_1 },
+        { title: "Payroll Services", img: acf.icon_2 },
+        { title: "Tax Planning", img: acf.icon_3 },
+        { title: "Audit & Assurance", img: acf.icon_4 },
+        { title: "Financial Statement", img: acf.icon_5 },
+        { title: "Business Advisory", img: acf.icon_6 },
+        { title: "Tech Consulting", img: acf.icon_7 },
+        { title: "Outsourced CFO", img: acf.icon_8 }
+      ].filter(item => item.img); // 🔥 IMPORTANT
+
+      console.log("SERVICES:", servicesData);
 
       setServices(servicesData);
-    })
-    .catch(err => console.error("Fetch error:", err));
+    });
 }, []);
+
+
 
   return (
     <div className="w-full overflow-hidden">
@@ -242,7 +240,8 @@ useEffect(() => {
           </FadeIn>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {services.map((service, i) => (
+            {services.length > 0 ? (
+              services.map((service, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
@@ -251,7 +250,7 @@ useEffect(() => {
                         alt={service.title}
                         className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
                       onError={(e) => {
-                        e.currentTarget.src = "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18";
+                        e.currentTarget.src = "https://via.placeholder.com/100";
                       }}
                       />
 
@@ -259,7 +258,10 @@ useEffect(() => {
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>
               </FadeIn>
-            ))}
+              ))
+) : (
+  <p className="col-span-4 text-center">Loading...</p>
+)}
           </div>
         </div>
       </section>

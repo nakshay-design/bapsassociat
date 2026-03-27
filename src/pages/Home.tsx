@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(() => {
     const fetchIcons = async () => {
       try {
-        const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf");
+    
 
         const data = await res.json();
         const acf = data?.acf || {};

@@ -10,19 +10,21 @@ import { useWordPressACF } from "@/hooks/use-wp-acf";
 
 export default function Home() {
 
-const { data: wpData, isLoading: wpLoading } = useWordPressACF(18);
-const acf = wpData?.acf || {};
+const { data: wpData, isLoading: wpLoading, error: wpError } = useWordPressACF(18);
 
-const icons = [
-  acf.icon_1 || "",
-  acf.icon_2 || "",
-  acf.icon_3 || "",
-  acf.icon_4 || "",
-  acf.icon_5 || "",
-  acf.icon_6 || "",
-  acf.icon_7 || "",
-  acf.icon_8 || "",
-];
+// Safe mapping of ACF fields with a direct fallback to empty array if data isn't ready
+const icons = wpData?.acf 
+  ? [
+      wpData.acf.icon_1,
+      wpData.acf.icon_2,
+      wpData.acf.icon_3,
+      wpData.acf.icon_4,
+      wpData.acf.icon_5,
+      wpData.acf.icon_6,
+      wpData.acf.icon_7,
+      wpData.acf.icon_8,
+    ].map(url => (typeof url === 'string' ? url : "")) // Ensure we only have strings
+  : Array(8).fill("");
 
    useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",

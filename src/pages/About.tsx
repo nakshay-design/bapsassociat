@@ -1,5 +1,5 @@
 import { FadeIn } from "@/components/FadeIn";
-import { CheckCircle2, Target, Users, Shield, TrendingUp } from "lucide-react";
+import { Target, Users, Shield, TrendingUp } from "lucide-react";
 import { useMeta } from "@/hooks/useMeta";
 
 export default function About() {

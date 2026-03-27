@@ -6,7 +6,7 @@ interface ACFData {
 
 export function useWordPressACF(
   pageId: number | string = 18,
-  baseUrl: string = "https://my.wordpress.net/scope:default"
+  baseUrl: string = "https://my.wordpress.net/scope:default/wp-content/uploads/2026/03/"
 ) {
   return useQuery({
     queryKey: ["wp-acf", pageId, baseUrl],

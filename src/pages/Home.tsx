@@ -5,20 +5,15 @@ import { FadeIn } from "@/components/FadeIn";
 import { Diamond, CheckSquare, MessageSquare, ChevronRight, CheckCircle2 } from "lucide-react";
 import { useMeta } from "@/hooks/useMeta";
 import IconImage from "@/components/IconImage";
-import { useEffect, useState } from "react";
+import { useWordPressACF } from "@/hooks/use-wp-acf";
 
 
 export default function Home() {
 
-const [icons, setIcons] = useState<string[]>([]);
+const { data: wpData, isLoading: wpLoading } = useWordPressACF(18);
+const acf = wpData?.acf || {};
 
-useEffect(() => {
-  fetch("https://my.wordpress.net/wp-json/wp/v2/pages/18?_fields=acf")
-    .then((res) => res.json())
-    .then((data) => {
-   const acf = data?.acf || {};
-
-const iconList = [
+const icons = [
   acf.icon_1 || "",
   acf.icon_2 || "",
   acf.icon_3 || "",
@@ -28,14 +23,6 @@ const iconList = [
   acf.icon_7 || "",
   acf.icon_8 || "",
 ];
-
-console.log("ICONS:", iconList);
-
-setIcons(iconList);
-      setIcons(iconList);
-    })
-    .catch((err) => console.error("API Error:", err));
-}, []);
 
    useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",

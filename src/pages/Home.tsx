@@ -13,35 +13,35 @@ export default function Home() {
 
 
   useEffect(() => {
-  const fetchIcons = async () => {
-    try {
-      const res = await fetch("/wp-json/wp/v2/pages/18?_fields=acf");
+    const fetchIcons = async () => {
+      try {
+        const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf");
 
-      const data = await res.json();
-      const acf = data?.acf || {};
+        const data = await res.json();
+        const acf = data?.acf || {};
 
-      const iconList = [
-        acf.icon_1 || "",
-        acf.icon_2 || "",
-        acf.icon_3 || "",
-        acf.icon_4 || "",
-        acf.icon_5 || "",
-        acf.icon_6 || "",
-        acf.icon_7 || "",
-        acf.icon_8 || "",
-      ].map(url => (typeof url === 'string' ? url.trim() : ""));
+        const iconList = [
+          acf.icon_1 || "",
+          acf.icon_2 || "",
+          acf.icon_3 || "",
+          acf.icon_4 || "",
+          acf.icon_5 || "",
+          acf.icon_6 || "",
+          acf.icon_7 || "",
+          acf.icon_8 || "",
+        ].map(url => (typeof url === 'string' ? url.trim() : ""));
 
-      console.log("FINAL ICONS:", iconList);
+        console.log("FINAL ICONS FROM PAGE 15:", iconList);
 
-      setIcons(iconList);
+        setIcons(iconList);
 
-    } catch (err) {
-      console.error("API Error:", err);
-    }
-  };
+      } catch (err) {
+        console.error("API Error:", err);
+      }
+    };
 
-  fetchIcons();
-}, []);
+    fetchIcons();
+  }, []);
 
 
    useMeta(

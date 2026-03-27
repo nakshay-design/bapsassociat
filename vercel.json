@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/wp-json/:path*",
-      "destination": "https://my.wordpress.net/scope:default/wp-json/:path*"
+      "destination": "https://dev-bapassociates.pantheonsite.io/wp-json/:path*"
     },
     {
       "source": "/(.*)",

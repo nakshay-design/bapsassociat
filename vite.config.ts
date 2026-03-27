@@ -21,7 +21,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/wp-json": {
-        target: "https://my.wordpress.net/scope:default",
+        target: "https://dev-bapassociates.pantheonsite.io",
         changeOrigin: true,
       },
     },

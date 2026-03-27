@@ -13,22 +13,25 @@ export default function Home() {
 const [icons, setIcons] = useState<string[]>([]);
 
 useEffect(() => {
-  fetch("https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18")
+  fetch("https://my.wordpress.net/wp-json/wp/v2/pages/18?_fields=acf")
     .then((res) => res.json())
     .then((data) => {
-      const acf = data?.acf;
+   const acf = data?.acf || {};
 
-      const iconList = [
-        acf?.icon_1,
-        acf?.icon_2,
-        acf?.icon_3,
-        acf?.icon_4,
-        acf?.icon_5,
-        acf?.icon_6,
-        acf?.icon_7,
-        acf?.icon_8,
-      ];
+const iconList = [
+  acf.icon_1 || "",
+  acf.icon_2 || "",
+  acf.icon_3 || "",
+  acf.icon_4 || "",
+  acf.icon_5 || "",
+  acf.icon_6 || "",
+  acf.icon_7 || "",
+  acf.icon_8 || "",
+];
 
+console.log("ICONS:", iconList);
+
+setIcons(iconList);
       setIcons(iconList);
     })
     .catch((err) => console.error("API Error:", err));
@@ -256,8 +259,10 @@ useEffect(() => {
                       }}
                     /> */}
 
-                    <IconImage src={icons[i]} alt={service.title} />
-                  </div>
+<IconImage 
+  src={icons[i] || ""} 
+  alt={service.title} 
+/>                  </div>
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>
               </FadeIn>

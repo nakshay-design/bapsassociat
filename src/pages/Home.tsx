@@ -22,9 +22,9 @@ const icons = wpData?.acf
       wpData.acf.icon_5,
       wpData.acf.icon_6,
       wpData.acf.icon_7,
-      wpData.acf.icon_8,
-    ].map(url => (typeof url === 'string' ? url : "")) // Ensure we only have strings
-  : Array(8).fill("");
+       wpData.acf.icon_8,
+     ].map(url => (typeof url === 'string' ? url.trim() : "")) // Trim whitespace
+   : Array(8).fill("");
 
    useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",

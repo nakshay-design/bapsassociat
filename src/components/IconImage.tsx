@@ -40,10 +40,11 @@ export default function IconImage({
     );
   }
 
-  // 2. If we have data, but it's an empty string or explicitly null
-  const hasNoSource = !src || src.trim() === "";
+  const isValid = src && src.trim() !== "";
+  const cleanSrc = src ? src.trim() : "";
 
-  if (hasNoSource || error) {
+  // 2. If we have data, but it's an empty string or explicitly null
+  if (!isValid || error) {
     return (
       <div 
         className={cn(
@@ -72,7 +73,7 @@ export default function IconImage({
         </div>
       )}
       <img
-        src={src}
+        src={cleanSrc}
         alt={alt}
         width={size}
         height={size}

@@ -10,6 +10,7 @@ import IconImage from "@/components/IconImage";
 export default function Home() {
 
   const [icons, setIcons] = useState<string[]>([]);
+
   useEffect(() => {
   const fetchIcons = async () => {
     try {
@@ -20,14 +21,18 @@ export default function Home() {
       const data = await res.json();
       const acf = data?.acf || {};
 
-      // 🔥 icon_1 fix (number → URL)
-      let icon1 = acf.icon_1;
+     let icon1 = acf.icon_1;
 
       if (typeof icon1 === "number") {
         const mediaRes = await fetch(
+         
           `https://my.wordpress.net/scope:default/wp-json/wp/v2/media/${icon1}`
         );
+
         const mediaData = await mediaRes.json();
+
+        console.log("MEDIA DATA:", mediaData);
+
         icon1 = mediaData.source_url;
       }
 
@@ -42,7 +47,7 @@ export default function Home() {
         acf.icon_8 || "",
       ];
 
-      console.log("ICONS:", iconList);
+      console.log("FINAL ICONS:", iconList);
 
       setIcons(iconList);
     } catch (err) {

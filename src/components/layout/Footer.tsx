@@ -1,5 +1,6 @@
+import * as React from "react";
 import { Link } from "wouter";
-import { Phone, Mail } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 
 export function Footer() {
   return (

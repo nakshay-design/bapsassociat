@@ -4,27 +4,9 @@ import { Input } from "@/components/ui/input";
 import { FadeIn } from "@/components/FadeIn";
 import { Diamond, CheckSquare, MessageSquare, ChevronRight, CheckCircle2 } from "lucide-react";
 import { useMeta } from "@/hooks/useMeta";
-import IconImage from "@/components/IconImage";
-import { useWordPressACF } from "@/hooks/use-wp-acf";
 
 
 export default function Home() {
-
-const { data: wpData, isLoading: wpLoading, error: wpError } = useWordPressACF(18);
-
-// Safe mapping of ACF fields with a direct fallback to empty array if data isn't ready
-const icons = wpData?.acf 
-  ? [
-      wpData.acf.icon_1,
-      wpData.acf.icon_2,
-      wpData.acf.icon_3,
-      wpData.acf.icon_4,
-      wpData.acf.icon_5,
-      wpData.acf.icon_6,
-      wpData.acf.icon_7,
-       wpData.acf.icon_8,
-     ].map(url => (typeof url === 'string' ? url.trim() : "")) // Trim whitespace
-   : Array(8).fill("");
 
    useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",
@@ -226,19 +208,19 @@ const icons = wpData?.acf
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { title: "Bookkeeping" },
-              { title: "Payroll Services" },
-              { title: "Tax Planning" },
-              { title: "Audit & Assurance" },
-              { title: "Financial Statement" },
-              { title: "Business Advisory" },
-              { title: "Tech Consulting" },
-              { title: "Outsourced CFO" }
+              { title: "Bookkeeping", img: "1.png" },
+              { title: "Payroll Services", img: "2.png" },
+              { title: "Tax Planning", img: "3.png" },
+              { title: "Audit & Assurance", img: "4.png" },
+              { title: "Financial Statement", img: "5.png" },
+              { title: "Business Advisory", img: "6.png" },
+              { title: "Tech Consulting", img: "7.png" },
+              { title: "Outsourced CFO", img: "8.png" }
             ].map((service, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
-                    {/* <img 
+                    <img 
                       src={`/images/icon/${service.img}`} 
                       alt={service.title}
                       className="w-full h-full object-contain"
@@ -246,13 +228,8 @@ const icons = wpData?.acf
                         e.currentTarget.style.display = 'none';
                         e.currentTarget.parentElement!.innerHTML = `<span class="text-3xl text-primary font-bold">${i+1}</span>`;
                       }}
-                    /> */}
-
-<IconImage 
-  src={icons[i] || ""} 
-  alt={service.title} 
-  isLoading={wpLoading}
-/>                  </div>
+                    />
+                  </div>
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>
               </FadeIn>

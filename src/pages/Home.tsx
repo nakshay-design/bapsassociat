@@ -12,11 +12,11 @@ export default function Home() {
   const [icons, setIcons] = useState<string[]>([]);
 
 
-  useEffect(() => {
+useEffect(() => {
   const fetchIcons = async () => {
     try {
       const res = await fetch(
-        "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18?_fields=acf"
+        "https://my.wordpress.net/wp-json/wp/v2/pages/18"
       );
 
       const data = await res.json();
@@ -24,33 +24,27 @@ export default function Home() {
 
       let icon1 = acf.icon_1;
 
-      // ✅ FIX: ID → URL
+      // 🔥 FIX ID → URL
       if (typeof icon1 === "number") {
         const mediaRes = await fetch(
-          `https://my.wordpress.net/scope:default/wp-json/wp/v2/media/${icon1}`
+          `https://my.wordpress.net/wp-json/wp/v2/media/${icon1}`
         );
-
         const mediaData = await mediaRes.json();
-
-        console.log("MEDIA:", mediaData);
-
-        icon1 = mediaData?.source_url || "";
+        icon1 = mediaData.source_url;
       }
 
-      const iconList = [
-        icon1 || "",
-        acf.icon_2 || "",
-        acf.icon_3 || "",
-        acf.icon_4 || "",
-        acf.icon_5 || "",
-        acf.icon_6 || "",
-        acf.icon_7 || "",
-        acf.icon_8 || "",
+      const icons = [
+        icon1,
+        acf.icon_2,
+        acf.icon_3,
+        acf.icon_4,
+        acf.icon_5,
+        acf.icon_6,
+        acf.icon_7,
+        acf.icon_8,
       ];
 
-      console.log("FINAL ICONS:", iconList);
-
-      setIcons(iconList);
+      setIcons(icons);
 
     } catch (err) {
       console.error("API Error:", err);
@@ -59,7 +53,6 @@ export default function Home() {
 
   fetchIcons();
 }, []);
-
 
    useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",

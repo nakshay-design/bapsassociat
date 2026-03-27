@@ -15,7 +15,7 @@ type Props = {
 
 /**
  * A robust component to display icons from WordPress ACF fields.
- * Includes performance optimizations and safe fallback for missing/errored images.
+ * Handles loading, error, and empty states gracefully.
  */
 export default function IconImage({ 
   src, 
@@ -28,7 +28,7 @@ export default function IconImage({
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Show loading state if explicitly told to or if we don't have a src yet but are expected to
+  // 1. If we are currently fetching data from the API
   if (isLoading) {
     return (
       <div 
@@ -40,10 +40,10 @@ export default function IconImage({
     );
   }
 
-  const isValid = src && src.trim() !== "";
+  // 2. If we have data, but it's an empty string or explicitly null
+  const hasNoSource = !src || src.trim() === "";
 
-  // ✅ Fallback for no image or error
-  if (!isValid || error) {
+  if (hasNoSource || error) {
     return (
       <div 
         className={cn(
@@ -53,20 +53,21 @@ export default function IconImage({
         style={{ width: size, height: size }}
       >
         <div className="flex flex-col items-center gap-1">
-          <ImageOff className="text-muted-foreground" style={{ width: size / 2.5, height: size / 2.5 }} />
+          <ImageOff className="text-muted-foreground/40" style={{ width: size / 2.5, height: size / 2.5 }} />
           {size > 60 && <span className="text-[10px] text-muted-foreground/60 font-medium">No Image</span>}
         </div>
       </div>
     );
   }
 
+  // 3. Render the actual image
   return (
     <div 
-      className={cn("relative flex items-center justify-center", className)}
+      className={cn("relative flex items-center justify-center overflow-hidden rounded-full", className)}
       style={{ width: size, height: size }}
     >
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted/10 animate-pulse rounded-full">
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/10 animate-pulse">
           <Loader2 className="w-5 h-5 text-accent animate-spin" />
         </div>
       )}
@@ -86,7 +87,7 @@ export default function IconImage({
         }}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
-        // @ts-ignore - fetchPriority is supported in modern browsers
+        // @ts-ignore
         fetchpriority={priority ? "high" : "low"}
       />
     </div>

@@ -4,9 +4,25 @@ interface ACFData {
   acf?: Record<string, string>;
 }
 
-/**
- * Hook to fetch ACF data from WordPress page
- */
+// 🔥 Convert ID → URL (if needed)
+const resolveImage = async (value: string | number, baseUrl: string) => {
+  if (!value) return "";
+
+  // ✅ Already URL
+  if (typeof value === "string") return value;
+
+  // 🔥 If ID → fetch media
+  try {
+    const res = await fetch(
+      `${baseUrl}/wp-json/wp/v2/media/${value}`
+    );
+    const data = await res.json();
+    return data?.source_url || "";
+  } catch {
+    return "";
+  }
+};
+
 export function useWordPressACF(
   pageId: number | string = 18,
   baseUrl: string = "https://my.wordpress.net/scope:default"
@@ -19,8 +35,6 @@ export function useWordPressACF(
 
       const url = `${cleanBase}/wp-json/wp/v2/pages/${pageId}?_fields=acf`;
 
-      console.log("Fetching:", url); 
-
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -29,16 +43,23 @@ export function useWordPressACF(
 
       const data = await response.json();
 
-      console.log("ACF DATA:", data); 
-
       if (!data?.acf) {
         throw new Error("ACF data not found");
       }
 
-      return data;
+      const acf = data.acf;
+
+      // 🔥 Normalize all images
+      const resolvedACF: Record<string, string> = {};
+
+      for (const key of Object.keys(acf)) {
+        resolvedACF[key] = await resolveImage(acf[key], cleanBase);
+      }
+
+      return { acf: resolvedACF };
     },
 
-    staleTime: 1000 * 60 * 5, // 5 minutes cache
+    staleTime: 1000 * 60 * 5,
     retry: 2,
     enabled: !!pageId,
   });

@@ -11,6 +11,7 @@ export default function Home() {
 
   const [icons, setIcons] = useState<string[]>([]);
 
+
   useEffect(() => {
   const fetchIcons = async () => {
     try {
@@ -21,19 +22,19 @@ export default function Home() {
       const data = await res.json();
       const acf = data?.acf || {};
 
-     let icon1 = acf.icon_1;
+      let icon1 = acf.icon_1;
 
+      // ✅ FIX: ID → URL
       if (typeof icon1 === "number") {
         const mediaRes = await fetch(
-         
           `https://my.wordpress.net/scope:default/wp-json/wp/v2/media/${icon1}`
         );
 
         const mediaData = await mediaRes.json();
 
-        console.log("MEDIA DATA:", mediaData);
+        console.log("MEDIA:", mediaData);
 
-        icon1 = mediaData.source_url;
+        icon1 = mediaData?.source_url || "";
       }
 
       const iconList = [
@@ -50,6 +51,7 @@ export default function Home() {
       console.log("FINAL ICONS:", iconList);
 
       setIcons(iconList);
+
     } catch (err) {
       console.error("API Error:", err);
     }
@@ -57,6 +59,7 @@ export default function Home() {
 
   fetchIcons();
 }, []);
+
 
    useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",

@@ -15,28 +15,13 @@ export default function Home() {
   useEffect(() => {
   const fetchIcons = async () => {
     try {
-      const res = await fetch("/api/wp-acf");
+      const res = await fetch("/wp-json/wp/v2/pages/18?_fields=acf");
 
       const data = await res.json();
       const acf = data?.acf || {};
 
-      let icon1 = acf.icon_1;
-
-      // ✅ FIX: ID → URL
-      if (typeof icon1 === "number") {
-        const mediaRes = await fetch(
-          `https://my.wordpress.net/scope:default/wp-json/wp/v2/media/${icon1}`
-        );
-
-        const mediaData = await mediaRes.json();
-
-        console.log("MEDIA:", mediaData);
-
-        icon1 = mediaData?.source_url || "";
-      }
-
       const iconList = [
-        icon1 || "",
+        acf.icon_1 || "",
         acf.icon_2 || "",
         acf.icon_3 || "",
         acf.icon_4 || "",
@@ -44,7 +29,7 @@ export default function Home() {
         acf.icon_6 || "",
         acf.icon_7 || "",
         acf.icon_8 || "",
-      ];
+      ].map(url => (typeof url === 'string' ? url.trim() : ""));
 
       console.log("FINAL ICONS:", iconList);
 

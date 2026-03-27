@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/wp-acf",
-      "destination": "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18?_fields=acf"
+      "source": "/wp-json/:path*",
+      "destination": "https://my.wordpress.net/scope:default/wp-json/:path*"
     },
     {
       "source": "/(.*)",

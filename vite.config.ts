@@ -20,10 +20,9 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 3000,
     proxy: {
-      "/api/wp-acf": {
-        target: "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18?_fields=acf",
+      "/wp-json": {
+        target: "https://my.wordpress.net/scope:default",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/wp-acf/, ""),
       },
     },
   },

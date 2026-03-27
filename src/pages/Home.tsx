@@ -20,16 +20,24 @@ export default function Home() {
         const data = await res.json();
         const acf = data?.acf || {};
 
+        // Helper function to extract URL from ACF image (handles string, ID, or Object)
+        const getImageUrl = (field: any) => {
+          if (!field) return "";
+          if (typeof field === 'string') return field.trim();
+          if (typeof field === 'object' && field.url) return field.url.trim();
+          return "";
+        };
+
         const iconList = [
-          acf.icon_1 || "",
-          acf.icon_2 || "",
-          acf.icon_3 || "",
-          acf.icon_4 || "",
-          acf.icon_5 || "",
-          acf.icon_6 || "",
-          acf.icon_7 || "",
-          acf.icon_8 || "",
-        ].map(url => (typeof url === 'string' ? url.trim() : ""));
+          getImageUrl(acf.icon_1),
+          getImageUrl(acf.icon_2),
+          getImageUrl(acf.icon_3),
+          getImageUrl(acf.icon_4),
+          getImageUrl(acf.icon_5),
+          getImageUrl(acf.icon_6),
+          getImageUrl(acf.icon_7),
+          getImageUrl(acf.icon_8),
+        ];
 
         console.log("FINAL ICONS FROM PAGE 15:", iconList);
 

@@ -17,31 +17,50 @@ export default function Home() {
       try {
         const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf");
 
-        const data = await res.json();
-        const acf = data?.acf || {};
+      const data = await res.json();
+      const acf = data?.acf || {};
 
-        // Helper function to extract URL from ACF image (handles string, ID, or Object)
-        const getImageUrl = (field: any) => {
-          if (!field) return "";
-          if (typeof field === 'string') return field.trim();
-          if (typeof field === 'object' && field.url) return field.url.trim();
-          return "";
-        };
+      console.log("RAW ACF DATA:", acf);
 
-        const iconList = [
-          getImageUrl(acf.icon_1),
-          getImageUrl(acf.icon_2),
-          getImageUrl(acf.icon_3),
-          getImageUrl(acf.icon_4),
-          getImageUrl(acf.icon_5),
-          getImageUrl(acf.icon_6),
-          getImageUrl(acf.icon_7),
-          getImageUrl(acf.icon_8),
-        ];
+      // Helper function to extract URL from ACF image (handles string, ID, or Object)
+      const getImageUrl = async (field: any) => {
+        if (!field) return "";
+        
+        // Case 1: Direct URL String
+        if (typeof field === 'string') return field.trim();
+        
+        // Case 2: ACF Image Object (Return Format: Image Array)
+        if (typeof field === 'object' && field.url) return field.url.trim();
+        
+        // Case 3: ACF Image ID (Return Format: Image ID)
+        if (typeof field === 'number') {
+          try {
+            const mediaRes = await fetch(`/wp-json/wp/v2/media/${field}`);
+            const mediaData = await mediaRes.json();
+            return mediaData?.source_url || "";
+          } catch (e) {
+            console.error("Media Fetch Error:", e);
+            return "";
+          }
+        }
+        
+        return "";
+      };
 
-        console.log("FINAL ICONS FROM PAGE 15:", iconList);
+      const iconList = await Promise.all([
+        getImageUrl(acf.icon_1),
+        getImageUrl(acf.icon_2),
+        getImageUrl(acf.icon_3),
+        getImageUrl(acf.icon_4),
+        getImageUrl(acf.icon_5),
+        getImageUrl(acf.icon_6),
+        getImageUrl(acf.icon_7),
+        getImageUrl(acf.icon_8),
+      ]);
 
-        setIcons(iconList);
+      console.log("FINAL PROCESSED ICONS:", iconList);
+
+      setIcons(iconList);
 
       } catch (err) {
         console.error("API Error:", err);

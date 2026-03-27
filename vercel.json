@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/wp-acf",
+      "destination": "https://my.wordpress.net/scope:default/wp-json/wp/v2/pages/18?_fields=acf"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

@@ -10,6 +10,7 @@ type Props = {
   className?: string;
   size?: number;
   priority?: boolean;
+  isLoading?: boolean;
 };
 
 /**
@@ -21,10 +22,23 @@ export default function IconImage({
   alt = "icon", 
   className, 
   size = 80,
-  priority = false 
+  priority = false,
+  isLoading = false
 }: Props) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // ✅ Show loading state if explicitly told to or if we don't have a src yet but are expected to
+  if (isLoading) {
+    return (
+      <div 
+        className={cn("flex items-center justify-center bg-muted/10 animate-pulse rounded-full", className)}
+        style={{ width: size, height: size }}
+      >
+        <Loader2 className="w-5 h-5 text-accent animate-spin" />
+      </div>
+    );
+  }
 
   const isValid = src && src.trim() !== "";
 

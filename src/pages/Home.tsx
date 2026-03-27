@@ -249,6 +249,7 @@ const icons = [
 <IconImage 
   src={icons[i] || ""} 
   alt={service.title} 
+  isLoading={wpLoading}
 />                  </div>
                   <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>

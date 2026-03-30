@@ -18,7 +18,68 @@ export default function Home() {
         const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf");
 
       const data = await res.json();
-      const acf = data?.acf || {};
+      const acf = data?.acf || {};[
+  {
+    "key": "group_home_page",
+    "title": "Home Page Sections",
+    "fields": [
+      {
+        "key": "field_hero_section",
+        "label": "Hero Section",
+        "name": "hero_section",
+        "type": "group",
+        "sub_fields": [
+          { "key": "field_hero_badge", "label": "Badge Text", "name": "badge", "type": "text", "default_value": "STRATEGIC MANAGEMENT & INVESTOR RELATIONS" },
+          { "key": "field_hero_title", "label": "Main Title", "name": "title", "type": "textarea", "default_value": "Maximizing Reach and Growth for Your Business." },
+          { "key": "field_hero_subtitle", "label": "Subtitle", "name": "subtitle", "type": "text", "default_value": "In Front of the Large Audience" },
+          { "key": "field_hero_description", "label": "Description", "name": "description", "type": "textarea", "default_value": "We provide expert business consulting and strategic distribution solutions." },
+          { "key": "field_hero_bg", "label": "Background Image", "name": "background_image", "type": "image", "return_format": "url" }
+        ]
+      },
+      {
+        "key": "field_services_grid",
+        "label": "Services Grid Section",
+        "name": "services_grid",
+        "type": "repeater",
+        "layout": "block",
+        "button_label": "Add Service",
+        "sub_fields": [
+          { "key": "field_service_title", "label": "Title", "name": "title", "type": "text" },
+          { "key": "field_service_icon", "label": "Icon (SVG or Image URL)", "name": "icon", "type": "text", "instructions": "Paste full URL to SVG or image" }
+        ]
+      },
+      {
+        "key": "field_cta_section",
+        "label": "CTA Subscribe Section",
+        "name": "cta_section",
+        "type": "group",
+        "sub_fields": [
+          { "key": "field_cta_title", "label": "Title", "name": "title", "type": "text", "default_value": "Let Us Know How We Can Assist Your Company" },
+          { "key": "field_cta_button_text", "label": "Button Text", "name": "button_text", "type": "text", "default_value": "Subscribe Now" }
+        ]
+      },
+      {
+        "key": "field_partners_repeater",
+        "label": "Partners Logos Section",
+        "name": "partners_logos",
+        "type": "repeater",
+        "button_label": "Add Partner",
+        "sub_fields": [
+          { "key": "field_partner_name", "label": "Partner Name", "name": "name", "type": "text" }
+        ]
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "page",
+          "operator": "==",
+          "value": "15"
+        }
+      ]
+    ]
+  }
+]
 
       console.log("RAW ACF DATA:", acf);
 

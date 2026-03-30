@@ -12,6 +12,7 @@ import IconImage from "@/components/IconImage";
 interface AboutPoint {
   point_icon: number | string;
   point_text: string;
+  point_icon_url?: string;
 }
 
 interface ServiceItem {
@@ -33,22 +34,40 @@ interface HomeData {
   hero_primary_button_link: string;
   hero_secondary_button_text: string;
   hero_secondary_button_link: string;
+  hero_primary_button_icon_url: string;
+  
   // Services Overview
   services_section_title: string;
   services_highlight_text: string;
   service_1_title: string;
+  service_1_icon_url: string;
   service_1_point_1: string;
+  service_1_point_1_icon_url: string;
   service_1_point_2: string;
+  service_1_point_2_icon_url: string;
   service_1_point_3: string;
+  service_1_point_3_icon_url: string;
+  
   service_2_title: string;
+  service_2_icon_url: string;
   service_2_point_1: string;
+  service_2_point_1_icon_url: string;
   service_2_point_2: string;
+  service_2_point_2_icon_url: string;
   service_2_point_3: string;
+  service_2_point_3_icon_url: string;
   service_2_point_4: string;
+  service_2_point_4_icon_url: string;
+  
   service_3_title: string;
+  service_3_icon_url: string;
   service_3_point_1: string;
+  service_3_point_1_icon_url: string;
   service_3_point_2: string;
+  service_3_point_2_icon_url: string;
   service_3_point_3: string;
+  service_3_point_3_icon_url: string;
+  
   // Growth / About
   about_heading: string;
   about_description: string;
@@ -58,16 +77,20 @@ interface HomeData {
   about_stat_number: string;
   about_stat_text: string;
   about_image_url: string;
+  client_satisfaction_icon_url: string;
+  
   // Services Grid
   services_heading: string;
   services_description: string;
   services_list: ServiceItem[];
   services_icons: string[];      // resolved URLs
+  
   // CTA Subscribe
   cta_heading: string;
   cta_placeholder: string;
   cta_button_text: string;
   cta_button_link: string;
+  
   // Partners
   partners_heading: string;
   partners_list: PartnerItem[];
@@ -79,44 +102,55 @@ const defaultData: HomeData = {
   hero_tagline: "STRATEGIC MANAGEMENT & INVESTOR RELATIONS",
   hero_title: "Maximizing Reach and Growth for Your Business.",
   hero_subtitle: "In Front of the Large Audience",
-  hero_description:
-    "We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally.",
+  hero_description: "We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally.",
   hero_primary_button_text: "Get Started",
   hero_primary_button_link: "/contact",
   hero_secondary_button_text: "Learn More",
   hero_secondary_button_link: "/about",
+  hero_primary_button_icon_url: "",
   services_section_title: "Efficient Solution So You Can Focus On",
   services_highlight_text: "RUNNING YOUR BUSINESS!",
   service_1_title: "Targeted Visibility",
+  service_1_icon_url: "",
   service_1_point_1: "News Distribution To Increase Visibility",
+  service_1_point_1_icon_url: "",
   service_1_point_2: "Earnings Releases To Meet Disclosure",
+  service_1_point_2_icon_url: "",
   service_1_point_3: "Investor Targeting Distribution Lists",
+  service_1_point_3_icon_url: "",
   service_2_title: "Filing & Compliance",
+  service_2_icon_url: "",
   service_2_point_1: "Precision Typesetting",
+  service_2_point_1_icon_url: "",
   service_2_point_2: "EDGAR Filing & Compliance",
+  service_2_point_2_icon_url: "",
   service_2_point_3: "XBRL Filing Solutions",
+  service_2_point_3_icon_url: "",
   service_2_point_4: "Annual Report Printing & Services",
+  service_2_point_4_icon_url: "",
   service_3_title: "Communication",
+  service_3_icon_url: "",
   service_3_point_1: "Webcasting",
+  service_3_point_1_icon_url: "",
   service_3_point_2: "Teleconferencing",
+  service_3_point_2_icon_url: "",
   service_3_point_3: "Virtual Retail Investor Conferences",
+  service_3_point_3_icon_url: "",
   about_heading: 'Your Growth, <br/><span class="text-blue-accent">Our Expertise.</span>',
-  about_description:
-    "At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth.",
+  about_description: "At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth.",
   about_points: [
-    { point_icon: "", point_text: "Global Distribution Networks" },
-    { point_icon: "", point_text: "Comprehensive Financial Reporting" },
-    { point_icon: "", point_text: "Strategic Brand Management" },
+    { point_icon: "", point_text: "Global Distribution Networks", point_icon_url: "" },
+    { point_icon: "", point_text: "Comprehensive Financial Reporting", point_icon_url: "" },
+    { point_icon: "", point_text: "Strategic Brand Management", point_icon_url: "" },
   ],
   about_button_text: "Discover Our Story",
   about_button_link: "/about",
   about_stat_number: "98%",
   about_stat_text: "Client Satisfaction",
-  about_image_url:
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop",
+  about_image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop",
+  client_satisfaction_icon_url: "",
   services_heading: "Certified public accountants in United States",
-  services_description:
-    "Delivering premium financial, consulting, and advisory services to ensure full compliance and strategic advantage.",
+  services_description: "Delivering premium financial, consulting, and advisory services to ensure full compliance and strategic advantage.",
   services_list: [
     { service_icon: "", service_title: "Bookkeeping" },
     { service_icon: "", service_title: "Payroll Services" },
@@ -180,11 +214,28 @@ export default function Home() {
         console.log("ACF DATA:", acf);
 
         // Resolve all image IDs to URLs in parallel
+        const resolvedAboutPoints = await Promise.all(
+          (acf.about_points || []).map(async (p: any) => ({
+            ...p,
+            point_icon_url: await resolveImageUrl(p.point_icon)
+          }))
+        );
+
         const [
           aboutImageUrl,
+          heroPrimaryButtonIconUrl,
+          clientSatisfactionIconUrl,
+          service1IconUrl, service1Point1IconUrl, service1Point2IconUrl, service1Point3IconUrl,
+          service2IconUrl, service2Point1IconUrl, service2Point2IconUrl, service2Point3IconUrl, service2Point4IconUrl,
+          service3IconUrl, service3Point1IconUrl, service3Point2IconUrl, service3Point3IconUrl,
           ...serviceIconUrls
         ] = await Promise.all([
           resolveImageUrl(acf.about_image),
+          resolveImageUrl(acf.hero_primary_button_icon),
+          resolveImageUrl(acf.client_satisfaction_icon),
+          resolveImageUrl(acf.service_1_icon), resolveImageUrl(acf.service_1_point_1_icon), resolveImageUrl(acf.service_1_point_2_icon), resolveImageUrl(acf.service_1_point_3_icon),
+          resolveImageUrl(acf.service_2_icon), resolveImageUrl(acf.service_2_point_1_icon), resolveImageUrl(acf.service_2_point_2_icon), resolveImageUrl(acf.service_2_point_3_icon), resolveImageUrl(acf.service_2_point_4_icon),
+          resolveImageUrl(acf.service_3_icon), resolveImageUrl(acf.service_3_point_1_icon), resolveImageUrl(acf.service_3_point_2_icon), resolveImageUrl(acf.service_3_point_3_icon),
           ...(acf.services_list || []).map((s: any) => resolveImageUrl(s.service_icon)),
         ]);
 
@@ -199,41 +250,64 @@ export default function Home() {
           hero_primary_button_link: acf.hero_primary_button_link || prev.hero_primary_button_link,
           hero_secondary_button_text: acf.hero_secondary_button_text || prev.hero_secondary_button_text,
           hero_secondary_button_link: acf.hero_secondary_button_link || prev.hero_secondary_button_link,
+          hero_primary_button_icon_url: heroPrimaryButtonIconUrl || prev.hero_primary_button_icon_url,
+          
           // Services Overview
           services_section_title: acf.services_section_title || prev.services_section_title,
           services_highlight_text: acf.services_highlight_text || prev.services_highlight_text,
+          
           service_1_title: acf.service_1_title || prev.service_1_title,
+          service_1_icon_url: service1IconUrl || prev.service_1_icon_url,
           service_1_point_1: acf.service_1_point_1 || prev.service_1_point_1,
+          service_1_point_1_icon_url: service1Point1IconUrl || prev.service_1_point_1_icon_url,
           service_1_point_2: acf.service_1_point_2 || prev.service_1_point_2,
+          service_1_point_2_icon_url: service1Point2IconUrl || prev.service_1_point_2_icon_url,
           service_1_point_3: acf.service_1_point_3 || prev.service_1_point_3,
+          service_1_point_3_icon_url: service1Point3IconUrl || prev.service_1_point_3_icon_url,
+          
           service_2_title: acf.service_2_title || prev.service_2_title,
+          service_2_icon_url: service2IconUrl || prev.service_2_icon_url,
           service_2_point_1: acf.service_2_point_1 || prev.service_2_point_1,
+          service_2_point_1_icon_url: service2Point1IconUrl || prev.service_2_point_1_icon_url,
           service_2_point_2: acf.service_2_point_2 || prev.service_2_point_2,
+          service_2_point_2_icon_url: service2Point2IconUrl || prev.service_2_point_2_icon_url,
           service_2_point_3: acf.service_2_point_3 || prev.service_2_point_3,
+          service_2_point_3_icon_url: service2Point3IconUrl || prev.service_2_point_3_icon_url,
           service_2_point_4: acf.service_2_point_4 || prev.service_2_point_4,
+          service_2_point_4_icon_url: service2Point4IconUrl || prev.service_2_point_4_icon_url,
+          
           service_3_title: acf.service_3_title || prev.service_3_title,
+          service_3_icon_url: service3IconUrl || prev.service_3_icon_url,
           service_3_point_1: acf.service_3_point_1 || prev.service_3_point_1,
+          service_3_point_1_icon_url: service3Point1IconUrl || prev.service_3_point_1_icon_url,
           service_3_point_2: acf.service_3_point_2 || prev.service_3_point_2,
+          service_3_point_2_icon_url: service3Point2IconUrl || prev.service_3_point_2_icon_url,
           service_3_point_3: acf.service_3_point_3 || prev.service_3_point_3,
+          service_3_point_3_icon_url: service3Point3IconUrl || prev.service_3_point_3_icon_url,
+          
           // Growth / About
           about_heading: acf.about_heading || prev.about_heading,
           about_description: acf.about_description || prev.about_description,
-          about_points: acf.about_points?.length ? acf.about_points : prev.about_points,
+          about_points: resolvedAboutPoints.length ? resolvedAboutPoints : prev.about_points,
           about_button_text: acf.about_button_text || prev.about_button_text,
           about_button_link: acf.about_button_link || prev.about_button_link,
           about_stat_number: acf.about_stat_number || prev.about_stat_number,
           about_stat_text: acf.about_stat_text || prev.about_stat_text,
           about_image_url: aboutImageUrl || prev.about_image_url,
+          client_satisfaction_icon_url: clientSatisfactionIconUrl || prev.client_satisfaction_icon_url,
+          
           // Services Grid
           services_heading: acf.services_heading || prev.services_heading,
           services_description: acf.services_description || prev.services_description,
           services_list: acf.services_list?.length ? acf.services_list : prev.services_list,
           services_icons: serviceIconUrls,
+          
           // CTA
           cta_heading: acf.cta_heading || prev.cta_heading,
           cta_placeholder: acf.cta_placeholder || prev.cta_placeholder,
           cta_button_text: acf.cta_button_text || prev.cta_button_text,
           cta_button_link: acf.cta_button_link || prev.cta_button_link,
+          
           // Partners
           partners_heading: acf.partners_heading || prev.partners_heading,
           partners_list: acf.partners_list?.length ? acf.partners_list : prev.partners_list,
@@ -247,46 +321,35 @@ export default function Home() {
   }, []);
 
   const {
-    hero_tagline,
-    hero_title,
-    hero_subtitle,
-    hero_description,
-    hero_primary_button_text,
-    hero_primary_button_link,
-    hero_secondary_button_text,
-    hero_secondary_button_link,
-    services_section_title,
-    services_highlight_text,
-    service_1_title,
-    service_1_point_1,
-    service_1_point_2,
-    service_1_point_3,
-    service_2_title,
-    service_2_point_1,
-    service_2_point_2,
-    service_2_point_3,
-    service_2_point_4,
-    service_3_title,
-    service_3_point_1,
-    service_3_point_2,
-    service_3_point_3,
-    about_heading,
-    about_description,
-    about_points,
-    about_button_text,
-    about_button_link,
-    about_stat_number,
-    about_stat_text,
-    about_image_url,
-    services_heading,
-    services_description,
-    services_list,
-    services_icons,
-    cta_heading,
-    cta_placeholder,
-    cta_button_text,
-    partners_heading,
-    partners_list,
+    hero_tagline, hero_title, hero_subtitle, hero_description,
+    hero_primary_button_text, hero_primary_button_link, hero_primary_button_icon_url,
+    hero_secondary_button_text, hero_secondary_button_link,
+    
+    services_section_title, services_highlight_text,
+    
+    service_1_title, service_1_icon_url,
+    service_1_point_1, service_1_point_1_icon_url,
+    service_1_point_2, service_1_point_2_icon_url,
+    service_1_point_3, service_1_point_3_icon_url,
+    
+    service_2_title, service_2_icon_url,
+    service_2_point_1, service_2_point_1_icon_url,
+    service_2_point_2, service_2_point_2_icon_url,
+    service_2_point_3, service_2_point_3_icon_url,
+    service_2_point_4, service_2_point_4_icon_url,
+    
+    service_3_title, service_3_icon_url,
+    service_3_point_1, service_3_point_1_icon_url,
+    service_3_point_2, service_3_point_2_icon_url,
+    service_3_point_3, service_3_point_3_icon_url,
+    
+    about_heading, about_description, about_points,
+    about_button_text, about_button_link, about_stat_number, about_stat_text, about_image_url, client_satisfaction_icon_url,
+    
+    services_heading, services_description, services_list, services_icons,
+    
+    cta_heading, cta_placeholder, cta_button_text,
+    partners_heading, partners_list,
   } = homeData;
 
   return (
@@ -330,7 +393,11 @@ export default function Home() {
               <Link href={hero_primary_button_link}>
                 <Button size="lg" variant="accent" className="group w-full sm:w-auto">
                   {hero_primary_button_text}
-                  <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  {hero_primary_button_icon_url ? (
+                    <img src={hero_primary_button_icon_url} alt="" className="ml-2 w-5 h-5 object-contain" />
+                  ) : (
+                    <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  )}
                 </Button>
               </Link>
               <Link href={hero_secondary_button_link}>
@@ -364,14 +431,22 @@ export default function Home() {
             <FadeIn delay={0.1} className="h-full">
               <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
                 <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
-                  <Diamond className="w-8 h-8" />
+                  {service_1_icon_url ? <img src={service_1_icon_url} alt="" className="w-8 h-8 object-contain" /> : <Diamond className="w-8 h-8" />}
                 </div>
                 <h3 className="text-2xl font-bold mb-6 text-heading">{service_1_title}</h3>
                 <ul className="space-y-4">
-                  {[service_1_point_1, service_1_point_2, service_1_point_3].map((item, i) => (
+                  {[
+                    { text: service_1_point_1, iconUrl: service_1_point_1_icon_url },
+                    { text: service_1_point_2, iconUrl: service_1_point_2_icon_url },
+                    { text: service_1_point_3, iconUrl: service_1_point_3_icon_url }
+                  ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-foreground">
-                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
-                      <span>{item}</span>
+                      {item.iconUrl ? (
+                         <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
+                      ) : (
+                         <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
+                      )}
+                      <span>{item.text}</span>
                     </li>
                   ))}
                 </ul>
@@ -383,14 +458,23 @@ export default function Home() {
               <div className="bg-primary h-full p-8 rounded-3xl shadow-xl hover:-translate-y-2 transition-all duration-300 text-white relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700" />
                 <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-8 text-accent">
-                  <CheckSquare className="w-8 h-8" />
+                  {service_2_icon_url ? <img src={service_2_icon_url} alt="" className="w-8 h-8 object-contain" /> : <CheckSquare className="w-8 h-8" />}
                 </div>
                 <h3 className="text-2xl font-bold mb-6 text-white">{service_2_title}</h3>
                 <ul className="space-y-4">
-                  {[service_2_point_1, service_2_point_2, service_2_point_3, service_2_point_4].map((item, i) => (
+                  {[
+                    { text: service_2_point_1, iconUrl: service_2_point_1_icon_url },
+                    { text: service_2_point_2, iconUrl: service_2_point_2_icon_url },
+                    { text: service_2_point_3, iconUrl: service_2_point_3_icon_url },
+                    { text: service_2_point_4, iconUrl: service_2_point_4_icon_url }
+                  ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-white/90">
-                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent" />
-                      <span>{item}</span>
+                      {item.iconUrl ? (
+                         <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
+                      ) : (
+                         <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent" />
+                      )}
+                      <span>{item.text}</span>
                     </li>
                   ))}
                 </ul>
@@ -401,14 +485,22 @@ export default function Home() {
             <FadeIn delay={0.3} className="h-full">
               <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
                 <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
-                  <MessageSquare className="w-8 h-8" />
+                  {service_3_icon_url ? <img src={service_3_icon_url} alt="" className="w-8 h-8 object-contain" /> : <MessageSquare className="w-8 h-8" />}
                 </div>
                 <h3 className="text-2xl font-bold mb-6 text-heading">{service_3_title}</h3>
                 <ul className="space-y-4">
-                  {[service_3_point_1, service_3_point_2, service_3_point_3].map((item, i) => (
+                  {[
+                    { text: service_3_point_1, iconUrl: service_3_point_1_icon_url },
+                    { text: service_3_point_2, iconUrl: service_3_point_2_icon_url },
+                    { text: service_3_point_3, iconUrl: service_3_point_3_icon_url }
+                  ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-foreground">
-                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
-                      <span>{item}</span>
+                      {item.iconUrl ? (
+                         <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
+                      ) : (
+                         <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
+                      )}
+                      <span>{item.text}</span>
                     </li>
                   ))}
                 </ul>
@@ -434,7 +526,7 @@ export default function Home() {
                 <div className="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-xl hidden md:block max-w-xs border border-border">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center text-white">
-                      <CheckCircle2 className="w-6 h-6" />
+                      {client_satisfaction_icon_url ? <img src={client_satisfaction_icon_url} alt="" className="w-6 h-6 object-contain" /> : <CheckCircle2 className="w-6 h-6" />}
                     </div>
                     <div>
                       <p className="text-3xl font-bold text-heading">{about_stat_number}</p>
@@ -457,7 +549,7 @@ export default function Home() {
                 {about_points.map((point, i) => (
                   <li key={i} className="flex items-center gap-3">
                     <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                      <CheckCircle2 className="w-4 h-4" />
+                      {point.point_icon_url ? <img src={point.point_icon_url} alt="" className="w-4 h-4 object-contain" /> : <CheckCircle2 className="w-4 h-4" />}
                     </div>
                     <span className="font-semibold text-heading">{point.point_text}</span>
                   </li>

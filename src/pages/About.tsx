@@ -24,6 +24,8 @@ interface AboutData {
   about_banner_description: string;
   about_banner_bg_color: string;
   about_banner_accent_color: string;
+  about_banner_image?: number | string;
+  about_banner_image_url?: string;
 
   // Stats
   about_stats_background: string;
@@ -58,6 +60,8 @@ const defaultData: AboutData = {
   about_banner_description: "Empowering businesses through strategic insights, innovative distribution, and flawless execution since our inception.",
   about_banner_bg_color: "#1E3A5F",
   about_banner_accent_color: "#6db842",
+  about_banner_image: "",
+  about_banner_image_url: "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop",
   about_stats_background: "#6DBE45",
   about_stats_list: [
     { stat_number: "500+", stat_label: "Businesses Served" },
@@ -120,13 +124,15 @@ export default function About() {
 
         console.log("ACF ABOUT DATA:", acf);
 
-        // Resolve images (content images + commitment icons)
+        // Resolve images (content images + commitment icons + banner)
         const [
           image1Url,
-          image2Url
+          image2Url,
+          bannerImageUrl
         ] = await Promise.all([
           resolveImageUrl(acf.about_content_image_1),
-          resolveImageUrl(acf.about_content_image_2)
+          resolveImageUrl(acf.about_content_image_2),
+          resolveImageUrl(acf.about_banner_image)
         ]);
 
         const resolvedCards = await Promise.all(
@@ -146,6 +152,7 @@ export default function About() {
           about_banner_description: acf.about_banner_description || prev.about_banner_description,
           about_banner_bg_color: acf.about_banner_bg_color || prev.about_banner_bg_color,
           about_banner_accent_color: acf.about_banner_accent_color || prev.about_banner_accent_color,
+          about_banner_image_url: bannerImageUrl || prev.about_banner_image_url,
 
           about_stats_background: acf.about_stats_background || prev.about_stats_background,
           about_stats_list: acf.about_stats_list?.length ? acf.about_stats_list : prev.about_stats_list,
@@ -177,6 +184,7 @@ export default function About() {
   const {
     about_banner_heading,
     about_banner_description,
+    about_banner_image_url,
     about_stats_list,
     about_content_heading,
     about_content_description_1,
@@ -199,7 +207,7 @@ export default function About() {
         <div className="absolute inset-0 overflow-hidden">
           {/* abstract dark blue background */}
           <img
-            src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop"
+            src={about_banner_image_url}
             alt="Abstract Background"
             className="w-full h-full object-cover opacity-10"
           />

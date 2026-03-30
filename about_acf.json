@@ -1,0 +1,59 @@
+{
+  "about_banner_heading": "Our goal is to get your company's story in front of the <span class='text-accent'>Largest Audience</span> possible!",
+  "about_banner_description": "Empowering businesses through strategic insights, innovative distribution, and flawless execution since our inception.",
+  "about_banner_bg_color": "#1E3A5F",
+  "about_banner_accent_color": "#6db842",
+  "about_stats_background": "#6DBE45",
+  "about_stats_list": [
+    {
+      "stat_number": "500+",
+      "stat_label": "Businesses Served"
+    },
+    {
+      "stat_number": "$50M+",
+      "stat_label": "Tax Savings"
+    },
+    {
+      "stat_number": "200+",
+      "stat_label": "Payroll Set Up"
+    },
+    {
+      "stat_number": "98%",
+      "stat_label": "Client Satisfaction"
+    }
+  ],
+  "about_content_heading": "Strategic Management & Global Partnerships",
+  "about_content_description_1": "BAP & Associates LIMITED is an industry-leading strategic management firm focused on optimizing investor relations, PR solutions, and robust financial compliance. We connect your brand to the audiences that matter most.",
+  "about_content_description_2": "Through our deep-rooted partnerships with major media outlets like Google, Yahoo, MSN, MarketWatch, and Bloomberg, we guarantee unprecedented visibility for your earnings releases, product launches, and corporate updates.",
+  "about_content_image_1": 452,
+  "about_content_image_2": 451,
+  "about_content_accent_color": "#6DBE45",
+  "about_commitment_heading": "Our Commitment",
+  "about_commitment_description": "We are driven by a core set of values that dictate how we operate, how we serve our clients, and how we deliver measurable results.",
+  "about_commitment_cards": [
+    {
+      "card_icon": "",
+      "card_title": "Client-Centric",
+      "card_description": "Your success is our primary objective."
+    },
+    {
+      "card_icon": "",
+      "card_title": "Collaborative",
+      "card_description": "We work as an extension of your team."
+    },
+    {
+      "card_icon": "",
+      "card_title": "Data-Driven",
+      "card_description": "Insights backed by concrete analytics."
+    },
+    {
+      "card_icon": "",
+      "card_title": "Risk Management",
+      "card_description": "Ensuring compliance and mitigating exposure."
+    }
+  ],
+  "about_vision_title": "Our Vision",
+  "about_vision_text": "To be the world's most trusted partner in strategic business management, setting the standard for excellence in corporate communication, financial advisory, and global distribution solutions.",
+  "about_mission_title": "Our Mission",
+  "about_mission_text": "To empower organizations of all sizes with the tools, insights, and reach required to operate efficiently, remain compliant, and achieve sustained, measurable growth in the competitive global market."
+}

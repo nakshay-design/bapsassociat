@@ -35,7 +35,7 @@ interface HomeData {
   hero_secondary_button_text: string;
   hero_secondary_button_link: string;
   hero_primary_button_icon_url: string;
-  
+
   // Services Overview
   services_section_title: string;
   services_highlight_text: string;
@@ -47,7 +47,7 @@ interface HomeData {
   service_1_point_2_icon_url: string;
   service_1_point_3: string;
   service_1_point_3_icon_url: string;
-  
+
   service_2_title: string;
   service_2_icon_url: string;
   service_2_point_1: string;
@@ -58,7 +58,7 @@ interface HomeData {
   service_2_point_3_icon_url: string;
   service_2_point_4: string;
   service_2_point_4_icon_url: string;
-  
+
   service_3_title: string;
   service_3_icon_url: string;
   service_3_point_1: string;
@@ -67,7 +67,7 @@ interface HomeData {
   service_3_point_2_icon_url: string;
   service_3_point_3: string;
   service_3_point_3_icon_url: string;
-  
+
   // Growth / About
   about_heading: string;
   about_description: string;
@@ -78,19 +78,19 @@ interface HomeData {
   about_stat_text: string;
   about_image_url: string;
   client_satisfaction_icon_url: string;
-  
+
   // Services Grid
   services_heading: string;
   services_description: string;
   services_list: ServiceItem[];
   services_icons: string[];      // resolved URLs
-  
+
   // CTA Subscribe
   cta_heading: string;
   cta_placeholder: string;
   cta_button_text: string;
   cta_button_link: string;
-  
+
   // Partners
   partners_heading: string;
   partners_list: PartnerItem[];
@@ -251,11 +251,11 @@ export default function Home() {
           hero_secondary_button_text: acf.hero_secondary_button_text || prev.hero_secondary_button_text,
           hero_secondary_button_link: acf.hero_secondary_button_link || prev.hero_secondary_button_link,
           hero_primary_button_icon_url: heroPrimaryButtonIconUrl || prev.hero_primary_button_icon_url,
-          
+
           // Services Overview
           services_section_title: acf.services_section_title || prev.services_section_title,
           services_highlight_text: acf.services_highlight_text || prev.services_highlight_text,
-          
+
           service_1_title: acf.service_1_title || prev.service_1_title,
           service_1_icon_url: service1IconUrl || prev.service_1_icon_url,
           service_1_point_1: acf.service_1_point_1 || prev.service_1_point_1,
@@ -264,7 +264,7 @@ export default function Home() {
           service_1_point_2_icon_url: service1Point2IconUrl || prev.service_1_point_2_icon_url,
           service_1_point_3: acf.service_1_point_3 || prev.service_1_point_3,
           service_1_point_3_icon_url: service1Point3IconUrl || prev.service_1_point_3_icon_url,
-          
+
           service_2_title: acf.service_2_title || prev.service_2_title,
           service_2_icon_url: service2IconUrl || prev.service_2_icon_url,
           service_2_point_1: acf.service_2_point_1 || prev.service_2_point_1,
@@ -275,7 +275,7 @@ export default function Home() {
           service_2_point_3_icon_url: service2Point3IconUrl || prev.service_2_point_3_icon_url,
           service_2_point_4: acf.service_2_point_4 || prev.service_2_point_4,
           service_2_point_4_icon_url: service2Point4IconUrl || prev.service_2_point_4_icon_url,
-          
+
           service_3_title: acf.service_3_title || prev.service_3_title,
           service_3_icon_url: service3IconUrl || prev.service_3_icon_url,
           service_3_point_1: acf.service_3_point_1 || prev.service_3_point_1,
@@ -284,7 +284,7 @@ export default function Home() {
           service_3_point_2_icon_url: service3Point2IconUrl || prev.service_3_point_2_icon_url,
           service_3_point_3: acf.service_3_point_3 || prev.service_3_point_3,
           service_3_point_3_icon_url: service3Point3IconUrl || prev.service_3_point_3_icon_url,
-          
+
           // Growth / About
           about_heading: acf.about_heading || prev.about_heading,
           about_description: acf.about_description || prev.about_description,
@@ -295,19 +295,19 @@ export default function Home() {
           about_stat_text: acf.about_stat_text || prev.about_stat_text,
           about_image_url: aboutImageUrl || prev.about_image_url,
           client_satisfaction_icon_url: clientSatisfactionIconUrl || prev.client_satisfaction_icon_url,
-          
+
           // Services Grid
           services_heading: acf.services_heading || prev.services_heading,
           services_description: acf.services_description || prev.services_description,
           services_list: acf.services_list?.length ? acf.services_list : prev.services_list,
           services_icons: serviceIconUrls,
-          
+
           // CTA
           cta_heading: acf.cta_heading || prev.cta_heading,
           cta_placeholder: acf.cta_placeholder || prev.cta_placeholder,
           cta_button_text: acf.cta_button_text || prev.cta_button_text,
           cta_button_link: acf.cta_button_link || prev.cta_button_link,
-          
+
           // Partners
           partners_heading: acf.partners_heading || prev.partners_heading,
           partners_list: acf.partners_list?.length ? acf.partners_list : prev.partners_list,
@@ -324,30 +324,30 @@ export default function Home() {
     hero_tagline, hero_title, hero_subtitle, hero_description,
     hero_primary_button_text, hero_primary_button_link, hero_primary_button_icon_url,
     hero_secondary_button_text, hero_secondary_button_link,
-    
+
     services_section_title, services_highlight_text,
-    
+
     service_1_title, service_1_icon_url,
     service_1_point_1, service_1_point_1_icon_url,
     service_1_point_2, service_1_point_2_icon_url,
     service_1_point_3, service_1_point_3_icon_url,
-    
+
     service_2_title, service_2_icon_url,
     service_2_point_1, service_2_point_1_icon_url,
     service_2_point_2, service_2_point_2_icon_url,
     service_2_point_3, service_2_point_3_icon_url,
     service_2_point_4, service_2_point_4_icon_url,
-    
+
     service_3_title, service_3_icon_url,
     service_3_point_1, service_3_point_1_icon_url,
     service_3_point_2, service_3_point_2_icon_url,
     service_3_point_3, service_3_point_3_icon_url,
-    
+
     about_heading, about_description, about_points,
     about_button_text, about_button_link, about_stat_number, about_stat_text, about_image_url, client_satisfaction_icon_url,
-    
+
     services_heading, services_description, services_list, services_icons,
-    
+
     cta_heading, cta_placeholder, cta_button_text,
     partners_heading, partners_list,
   } = homeData;
@@ -442,9 +442,9 @@ export default function Home() {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-foreground">
                       {item.iconUrl ? (
-                         <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
+                        <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
                       ) : (
-                         <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
+                        <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
                       )}
                       <span>{item.text}</span>
                     </li>
@@ -470,9 +470,9 @@ export default function Home() {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-white/90">
                       {item.iconUrl ? (
-                         <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
+                        <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
                       ) : (
-                         <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent" />
+                        <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent" />
                       )}
                       <span>{item.text}</span>
                     </li>
@@ -496,9 +496,9 @@ export default function Home() {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-foreground">
                       {item.iconUrl ? (
-                         <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
+                        <img src={item.iconUrl} alt="" className="w-5 h-5 mt-0.5 object-contain flex-shrink-0" />
                       ) : (
-                         <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
+                        <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
                       )}
                       <span>{item.text}</span>
                     </li>

@@ -34,6 +34,19 @@ export default function Home() {
   // Helper for background images
   const heroBg = acf?.hero_section?.background_image || "https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg";
 
+  // Icon Mapping for Lucide Icons
+  const IconMap: { [key: string]: any } = {
+    Diamond,
+    CheckSquare,
+    MessageSquare,
+    CheckCircle2,
+  };
+
+  const getIcon = (iconName: string) => {
+    const IconComponent = IconMap[iconName] || Diamond;
+    return <IconComponent className="w-8 h-8" />;
+  };
+
   return (
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
@@ -87,14 +100,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Overview Section (Static for now as requested for specific sections) */}
+      {/* Services Overview Section (DYNAMIC) */}
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-display font-bold text-heading mb-6">
-              Efficient Solution So You Can Focus On <br className="hidden md:block"/>
+              {acf?.services_overview_title || "Efficient Solution So You Can Focus On"} <br className="hidden md:block"/>
               <span className="text-accent relative inline-block">
-                RUNNING YOUR BUSINESS!
+                {acf?.services_overview_highlight || "RUNNING YOUR BUSINESS!"}
                 <svg className="absolute w-full h-3 -bottom-1 left-0 text-accent opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="transparent" />
                 </svg>
@@ -103,71 +116,72 @@ export default function Home() {
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Hardcoded Overview Cards as they were not in the dynamic list but are key sections */}
-            <FadeIn delay={0.1} className="h-full">
-              <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
-                <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
-                  <Diamond className="w-8 h-8" />
+            {(acf?.services_overview || [
+              { 
+                title: "Targeted Visibility", 
+                icon: "Diamond", 
+                features: ["News Distribution To Increase Visibility", "Earnings Releases To Meet Disclosure", "Investor Targeting Distribution Lists"] 
+              },
+              { 
+                title: "Filing & Compliance", 
+                icon: "CheckSquare", 
+                is_primary: true,
+                features: ["Precision Typesetting", "EDGAR Filing & Compliance", "XBRL Filing Solutions", "Annual Report Printing & Services"] 
+              },
+              { 
+                title: "Communication", 
+                icon: "MessageSquare", 
+                features: ["Webcasting", "Teleconferencing", "Virtual Retail Investor Conferences"] 
+              }
+            ]).map((card: any, i: number) => (
+              <FadeIn key={i} delay={0.1 * (i + 1)} className="h-full">
+                <div className={cn(
+                  "h-full p-8 rounded-3xl transition-all duration-300 group relative overflow-hidden",
+                  card.is_primary 
+                    ? "bg-primary text-white shadow-xl hover:-translate-y-2" 
+                    : "bg-card border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2"
+                )}>
+                  {card.is_primary && (
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                  )}
+                  <div className={cn(
+                    "w-16 h-16 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300",
+                    card.is_primary 
+                      ? "bg-white/10 text-accent" 
+                      : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white"
+                  )}>
+                    {getIcon(card.icon)}
+                  </div>
+                  <h3 className={cn("text-2xl font-bold mb-6", card.is_primary ? "text-white" : "text-heading")}>
+                    {card.title}
+                  </h3>
+                  <ul className="space-y-4">
+                    {(card.features || []).map((feature: any, j: number) => {
+                      const featureText = typeof feature === 'string' ? feature : feature.feature;
+                      return (
+                        <li key={j} className={cn("flex items-start gap-3", card.is_primary ? "text-white/90" : "text-foreground")}>
+                          <Diamond className={cn("w-5 h-5 mt-0.5 flex-shrink-0", card.is_primary ? "text-accent fill-accent" : "text-accent fill-accent/20")} />
+                          <span>{featureText}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
-                <h3 className="text-2xl font-bold mb-6 text-heading">Targeted Visibility</h3>
-                <ul className="space-y-4">
-                  {["News Distribution To Increase Visibility", "Earnings Releases To Meet Disclosure", "Investor Targeting Distribution Lists"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-foreground">
-                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.2} className="h-full">
-              <div className="bg-primary h-full p-8 rounded-3xl shadow-xl hover:-translate-y-2 transition-all duration-300 text-white relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
-                <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-8 text-accent">
-                  <CheckSquare className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-bold mb-6 text-white">Filing & Compliance</h3>
-                <ul className="space-y-4">
-                  {["Precision Typesetting", "EDGAR Filing & Compliance", "XBRL Filing Solutions", "Annual Report Printing & Services"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-white/90">
-                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.3} className="h-full">
-              <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
-                <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
-                  <MessageSquare className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-bold mb-6 text-heading">Communication</h3>
-                <ul className="space-y-4">
-                  {["Webcasting", "Teleconferencing", "Virtual Retail Investor Conferences"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-foreground">
-                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </FadeIn>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Your Growth Section (Static Content as per current UI design) */}
+      {/* Your Growth Section (DYNAMIC) */}
       <section className="py-24 bg-secondary/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn direction="right">
               <div className="relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Modern office" 
+                  src={acf?.growth_section?.image || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop"} 
+                  alt={acf?.growth_section?.title || "Modern office"} 
                   className="rounded-3xl shadow-2xl object-cover h-[500px] w-full"
                 />
                 <div className="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-xl hidden md:block max-w-xs border border-border">
@@ -176,7 +190,9 @@ export default function Home() {
                       <CheckCircle2 className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-3xl font-bold text-heading">98%</p>
+                      <p className="text-3xl font-bold text-heading">
+                        {acf?.growth_section?.satisfaction_percentage || "98%"}
+                      </p>
                       <p className="text-sm text-muted-foreground font-semibold">Client Satisfaction</p>
                     </div>
                   </div>
@@ -186,24 +202,29 @@ export default function Home() {
             
             <FadeIn direction="left">
               <h2 className="text-4xl lg:text-5xl font-display font-bold text-heading mb-6">
-                Your Growth, <br/>
-                <span className="text-blue-accent">Our Expertise.</span>
+                {acf?.growth_section?.title_line_1 || "Your Growth,"} <br/>
+                <span className="text-blue-accent">{acf?.growth_section?.title_highlight || "Our Expertise."}</span>
               </h2>
               <p className="text-lg text-foreground mb-8 leading-relaxed">
-                At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth.
+                {acf?.growth_section?.description || "At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth."}
               </p>
               <ul className="space-y-4 mb-10">
-                {["Global Distribution Networks", "Comprehensive Financial Reporting", "Strategic Brand Management"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                      <CheckCircle2 className="w-4 h-4" />
-                    </div>
-                    <span className="font-semibold text-heading">{item}</span>
-                  </li>
-                ))}
+                {(acf?.growth_section?.features || ["Global Distribution Networks", "Comprehensive Financial Reporting", "Strategic Brand Management"]).map((item: any, i: number) => {
+                  const itemText = typeof item === 'string' ? item : item.feature;
+                  return (
+                    <li key={i} className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                        <CheckCircle2 className="w-4 h-4" />
+                      </div>
+                      <span className="font-semibold text-heading">{itemText}</span>
+                    </li>
+                  );
+                })}
               </ul>
               <Link href="/about">
-                <Button size="lg" className="rounded-full">Discover Our Story</Button>
+                <Button size="lg" className="rounded-full">
+                  {acf?.growth_section?.button_text || "Discover Our Story"}
+                </Button>
               </Link>
             </FadeIn>
           </div>

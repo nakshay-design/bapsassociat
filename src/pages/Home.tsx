@@ -8,53 +8,83 @@ import { useEffect, useState } from "react";
 import IconImage from "@/components/IconImage";
 
 export default function Home() {
-  const [acf, setAcf] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+
+  const [icons, setIcons] = useState<string[]>([]);
+
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchIcons = async () => {
       try {
         const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf");
-        const data = await res.json();
-        setAcf(data?.acf || null);
+
+      const data = await res.json();
+      const acf = data?.acf || {};
+
+      console.log("RAW ACF DATA:", acf);
+
+      // Helper function to extract URL from ACF image (handles string, ID, or Object)
+      const getImageUrl = async (field: any) => {
+        if (!field) return "";
+        
+        // Case 1: Direct URL String
+        if (typeof field === 'string') return field.trim();
+        
+        // Case 2: ACF Image Object (Return Format: Image Array)
+        if (typeof field === 'object' && field.url) return field.url.trim();
+        
+        // Case 3: ACF Image ID (Return Format: Image ID)
+        if (typeof field === 'number') {
+          try {
+            const mediaRes = await fetch(`/wp-json/wp/v2/media/${field}`);
+            const mediaData = await mediaRes.json();
+            return mediaData?.source_url || "";
+          } catch (e) {
+            console.error("Media Fetch Error:", e);
+            return "";
+          }
+        }
+        
+        return "";
+      };
+
+      const iconList = await Promise.all([
+        getImageUrl(acf.icon_1),
+        getImageUrl(acf.icon_2),
+        getImageUrl(acf.icon_3),
+        getImageUrl(acf.icon_4),
+        getImageUrl(acf.icon_5),
+        getImageUrl(acf.icon_6),
+        getImageUrl(acf.icon_7),
+        getImageUrl(acf.icon_8),
+      ]);
+
+      console.log("FINAL PROCESSED ICONS:", iconList);
+
+      setIcons(iconList);
+
       } catch (err) {
         console.error("API Error:", err);
-      } finally {
-        setLoading(false);
       }
     };
-    fetchData();
+
+    fetchIcons();
   }, []);
 
-  useMeta(
+
+   useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",
     "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
   );
-
-  // Helper for background images
-  const heroBg = acf?.hero_section?.background_image || "https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg";
-
-  // Icon Mapping for Lucide Icons
-  const IconMap: { [key: string]: any } = {
-    Diamond,
-    CheckSquare,
-    MessageSquare,
-    CheckCircle2,
-  };
-
-  const getIcon = (iconName: string) => {
-    const IconComponent = IconMap[iconName] || Diamond;
-    return <IconComponent className="w-8 h-8" />;
-  };
 
   return (
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center bg-primary">
         <div className="absolute inset-0 overflow-hidden">
+          {/* corporate consulting background image */}
           <img 
-            src={heroBg} 
-            alt="Hero Background" 
+            src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg" 
+            alt="Business consulting meeting" 
             className="w-full h-full object-cover opacity-20 scale-105 animate-[pulse_20s_ease-in-out_infinite_alternate]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
@@ -63,22 +93,23 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
             <span className="inline-block py-1.5 px-4 rounded-full bg-accent/20 text-accent font-bold tracking-wider text-sm mb-6 border border-accent/30">
-              {acf?.hero_section?.badge || "STRATEGIC MANAGEMENT & INVESTOR RELATIONS"}
+              STRATEGIC MANAGEMENT & INVESTOR RELATIONS
             </span>
           </FadeIn>
           
           <FadeIn delay={0.2}>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight whitespace-pre-line">
-              {acf?.hero_section?.title || "Maximizing Reach and \nGrowth for Your Business."}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight">
+              Maximizing Reach and <br className="hidden sm:block" />
+              Growth for Your Business.
             </h1>
           </FadeIn>
           
           <FadeIn delay={0.4}>
             <p className="text-2xl sm:text-3xl text-accent font-light mb-8">
-              {acf?.hero_section?.subtitle || "In Front of the Large Audience"}
+              In Front of the Large Audience
             </p>
             <p className="text-lg text-white/80 max-w-3xl mx-auto mb-10 leading-relaxed">
-              {acf?.hero_section?.description || "We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally."}
+              We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally.
             </p>
           </FadeIn>
           
@@ -100,14 +131,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Overview Section (DYNAMIC) */}
+      {/* Services Overview Section */}
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-display font-bold text-heading mb-6">
-              {acf?.services_overview_title || "Efficient Solution So You Can Focus On"} <br className="hidden md:block"/>
+              Efficient Solution So You Can Focus On <br className="hidden md:block"/>
               <span className="text-accent relative inline-block">
-                {acf?.services_overview_highlight || "RUNNING YOUR BUSINESS!"}
+                RUNNING YOUR BUSINESS!
                 <svg className="absolute w-full h-3 -bottom-1 left-0 text-accent opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="transparent" />
                 </svg>
@@ -116,72 +147,74 @@ export default function Home() {
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {(acf?.services_overview || [
-              { 
-                title: "Targeted Visibility", 
-                icon: "Diamond", 
-                features: ["News Distribution To Increase Visibility", "Earnings Releases To Meet Disclosure", "Investor Targeting Distribution Lists"] 
-              },
-              { 
-                title: "Filing & Compliance", 
-                icon: "CheckSquare", 
-                is_primary: true,
-                features: ["Precision Typesetting", "EDGAR Filing & Compliance", "XBRL Filing Solutions", "Annual Report Printing & Services"] 
-              },
-              { 
-                title: "Communication", 
-                icon: "MessageSquare", 
-                features: ["Webcasting", "Teleconferencing", "Virtual Retail Investor Conferences"] 
-              }
-            ]).map((card: any, i: number) => (
-              <FadeIn key={i} delay={0.1 * (i + 1)} className="h-full">
-                <div className={cn(
-                  "h-full p-8 rounded-3xl transition-all duration-300 group relative overflow-hidden",
-                  card.is_primary 
-                    ? "bg-primary text-white shadow-xl hover:-translate-y-2" 
-                    : "bg-card border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2"
-                )}>
-                  {card.is_primary && (
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
-                  )}
-                  <div className={cn(
-                    "w-16 h-16 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-300",
-                    card.is_primary 
-                      ? "bg-white/10 text-accent" 
-                      : "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white"
-                  )}>
-                    {getIcon(card.icon)}
-                  </div>
-                  <h3 className={cn("text-2xl font-bold mb-6", card.is_primary ? "text-white" : "text-heading")}>
-                    {card.title}
-                  </h3>
-                  <ul className="space-y-4">
-                    {(card.features || []).map((feature: any, j: number) => {
-                      const featureText = typeof feature === 'string' ? feature : feature.feature;
-                      return (
-                        <li key={j} className={cn("flex items-start gap-3", card.is_primary ? "text-white/90" : "text-foreground")}>
-                          <Diamond className={cn("w-5 h-5 mt-0.5 flex-shrink-0", card.is_primary ? "text-accent fill-accent" : "text-accent fill-accent/20")} />
-                          <span>{featureText}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+            {/* Card 1 */}
+            <FadeIn delay={0.1} className="h-full">
+              <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
+                <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
+                  <Diamond className="w-8 h-8" />
                 </div>
-              </FadeIn>
-            ))}
+                <h3 className="text-2xl font-bold mb-6 text-heading">Targeted Visibility</h3>
+                <ul className="space-y-4">
+                  {["News Distribution To Increase Visibility", "Earnings Releases To Meet Disclosure", "Investor Targeting Distribution Lists"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-foreground">
+                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeIn>
+
+            {/* Card 2 */}
+            <FadeIn delay={0.2} className="h-full">
+              <div className="bg-primary h-full p-8 rounded-3xl shadow-xl hover:-translate-y-2 transition-all duration-300 text-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-8 text-accent">
+                  <CheckSquare className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold mb-6 text-white">Filing & Compliance</h3>
+                <ul className="space-y-4">
+                  {["Precision Typesetting", "EDGAR Filing & Compliance", "XBRL Filing Solutions", "Annual Report Printing & Services"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-white/90">
+                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeIn>
+
+            {/* Card 3 */}
+            <FadeIn delay={0.3} className="h-full">
+              <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
+                <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold mb-6 text-heading">Communication</h3>
+                <ul className="space-y-4">
+                  {["Webcasting", "Teleconferencing", "Virtual Retail Investor Conferences"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-foreground">
+                      <Diamond className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 fill-accent/20" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* Your Growth Section (DYNAMIC) */}
+      {/* Your Growth Section */}
       <section className="py-24 bg-secondary/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn direction="right">
               <div className="relative">
+                {/* modern office building facade */}
                 <img 
-                  src={acf?.growth_section?.image || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop"} 
-                  alt={acf?.growth_section?.title || "Modern office"} 
+                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" 
+                  alt="Modern office" 
                   className="rounded-3xl shadow-2xl object-cover h-[500px] w-full"
                 />
                 <div className="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-xl hidden md:block max-w-xs border border-border">
@@ -190,9 +223,7 @@ export default function Home() {
                       <CheckCircle2 className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-3xl font-bold text-heading">
-                        {acf?.growth_section?.satisfaction_percentage || "98%"}
-                      </p>
+                      <p className="text-3xl font-bold text-heading">98%</p>
                       <p className="text-sm text-muted-foreground font-semibold">Client Satisfaction</p>
                     </div>
                   </div>
@@ -202,36 +233,31 @@ export default function Home() {
             
             <FadeIn direction="left">
               <h2 className="text-4xl lg:text-5xl font-display font-bold text-heading mb-6">
-                {acf?.growth_section?.title_line_1 || "Your Growth,"} <br/>
-                <span className="text-blue-accent">{acf?.growth_section?.title_highlight || "Our Expertise."}</span>
+                Your Growth, <br/>
+                <span className="text-blue-accent">Our Expertise.</span>
               </h2>
               <p className="text-lg text-foreground mb-8 leading-relaxed">
-                {acf?.growth_section?.description || "At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth."}
+                At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth.
               </p>
               <ul className="space-y-4 mb-10">
-                {(acf?.growth_section?.features || ["Global Distribution Networks", "Comprehensive Financial Reporting", "Strategic Brand Management"]).map((item: any, i: number) => {
-                  const itemText = typeof item === 'string' ? item : item.feature;
-                  return (
-                    <li key={i} className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                        <CheckCircle2 className="w-4 h-4" />
-                      </div>
-                      <span className="font-semibold text-heading">{itemText}</span>
-                    </li>
-                  );
-                })}
+                {["Global Distribution Networks", "Comprehensive Financial Reporting", "Strategic Brand Management"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <span className="font-semibold text-heading">{item}</span>
+                  </li>
+                ))}
               </ul>
               <Link href="/about">
-                <Button size="lg" className="rounded-full">
-                  {acf?.growth_section?.button_text || "Discover Our Story"}
-                </Button>
+                <Button size="lg" className="rounded-full">Discover Our Story</Button>
               </Link>
             </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* Services Grid Section (DYNAMIC) */}
+      {/* Services Grid Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
@@ -244,19 +270,25 @@ export default function Home() {
           </FadeIn>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {(acf?.services_grid || Array(8).fill({})).map((service: any, i: number) => (
+            {[
+  { title: "Bookkeeping" },
+  { title: "Payroll Services" },
+  { title: "Tax Planning" },
+  { title: "Audit & Assurance" },
+  { title: "Financial Statement" },
+  { title: "Business Advisory" },
+  { title: "Tech Consulting" },
+  { title: "Outsourced CFO" }
+].map((service, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
-                    <IconImage 
-                      src={service.icon || ""} 
-                      alt={service.title || "Service Icon"} 
-                      isLoading={loading}
-                    />
+                   <IconImage 
+  src={icons[i] || ""} 
+  alt={service.title} 
+/>
                   </div>
-                  <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">
-                    {service.title || `Service ${i + 1}`}
-                  </h4>
+                  <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
                 </div>
               </FadeIn>
             ))}
@@ -264,7 +296,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Subscribe Section (DYNAMIC) */}
+      {/* Subscribe Section */}
       <section className="py-20 bg-accent relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -ml-20 -mb-20"></div>
@@ -272,7 +304,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
             <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-8">
-              {acf?.cta_section?.title || "Let Us Know How We Can Assist Your Company"}
+              Let Us Know How We Can Assist Your Company
             </h2>
             <form className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!'); }}>
               <Input 
@@ -282,22 +314,22 @@ export default function Home() {
                 required
               />
               <Button type="submit" size="lg" className="bg-primary text-white hover:bg-primary/90 shadow-xl sm:w-auto w-full h-14 whitespace-nowrap">
-                {acf?.cta_section?.button_text || "Subscribe Now"}
+                Subscribe Now
               </Button>
             </form>
           </FadeIn>
         </div>
       </section>
 
-      {/* Partners Section (DYNAMIC) */}
+      {/* Partners Section */}
       <section className="py-16 bg-white border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
             <h3 className="text-2xl font-display font-bold text-heading mb-10">Our Partnership with Major Media Outlets</h3>
             <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-              {(acf?.partners_logos || ['Google', 'Yahoo', 'MarketWatch', 'Bloomberg', 'MSN']).map((partner: any, i: number) => (
+              {['Google', 'Yahoo', 'MarketWatch', 'Bloomberg', 'MSN'].map((partner, i) => (
                 <div key={i} className="text-2xl md:text-4xl font-black font-display tracking-tighter text-muted-foreground hover:text-primary transition-colors">
-                  {typeof partner === 'string' ? partner : partner.name}
+                  {partner}
                 </div>
               ))}
             </div>

@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { Globe2, FileText, CheckCircle2, BarChart } from "lucide-react";
 import { useMeta } from "@/hooks/useMeta";
 
+// ─── WordPress API base ───────────────────────────────────────────────────────
+
+const WP_API = "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FaqItem {
@@ -56,7 +60,7 @@ interface GlobalOptionsData {
 
 const distributionFallbackIcons = [Globe2, FileText, CheckCircle2, BarChart];
 
-// ─── Defaults — shown while loading / on error ───────────────────────────────
+// ─── Defaults — shown while loading / on fetch error ─────────────────────────
 
 const defaultData: GlobalOptionsData = {
   services_banner_heading:
@@ -81,32 +85,41 @@ const defaultData: GlobalOptionsData = {
   services_global_options_distribution_bg_color: "#1E3A5F",
   services_global_options_distribution_accent_color: "#6DBE45",
   services_global_options_distribution_cards: [
-    { card_icon: "", card_icon_url: "", card_title: "Global Reach",          card_description: "Distribute your press releases and corporate news to media terminals worldwide.",                  fallback_icon: Globe2       },
-    { card_icon: "", card_icon_url: "", card_title: "Translation Services",  card_description: "Professional financial translation tailored for regional regulatory standards.",                   fallback_icon: FileText     },
-    { card_icon: "", card_icon_url: "", card_title: "Regional Expertise",    card_description: "Navigate complex international markets with our dedicated affiliate offices.",                    fallback_icon: CheckCircle2 },
-    { card_icon: "", card_icon_url: "", card_title: "Reporting & Analytics", card_description: "Track the performance and visibility of your global campaigns in real-time.",                     fallback_icon: BarChart     },
+    { card_icon: "", card_icon_url: "", card_title: "Global Reach", card_description: "Distribute your press releases and corporate news to media terminals worldwide.", fallback_icon: Globe2 },
+    { card_icon: "", card_icon_url: "", card_title: "Translation Services", card_description: "Professional financial translation tailored for regional regulatory standards.", fallback_icon: FileText },
+    { card_icon: "", card_icon_url: "", card_title: "Regional Expertise", card_description: "Navigate complex international markets with our dedicated affiliate offices.", fallback_icon: CheckCircle2 },
+    { card_icon: "", card_icon_url: "", card_title: "Reporting & Analytics", card_description: "Track the performance and visibility of your global campaigns in real-time.", fallback_icon: BarChart },
   ],
 
   services_global_options_faq_heading: "Frequently Asked Questions",
   services_global_options_faq_subtitle: "Everything you need to know about our global capabilities.",
   services_global_options_faq_list: [
-    { faq_question: "Do you provide international tax advice?",            faq_answer: "Yes, our certified experts provide comprehensive international tax planning and compliance services tailored to businesses operating across borders.",                                                                 faq_default_open: false },
-    { faq_question: "How many countries does your distribution network cover?", faq_answer: "Our global distribution network spans over 170+ countries and supports more than 40 languages, ensuring localized reach on a massive scale.",                                                                   faq_default_open: false },
-    { faq_question: "Can you assist with multilingual regulatory filings?", faq_answer: "Absolutely. We offer complete translation and typesetting services that meet the specific regulatory requirements of various international exchanges.",                                                             faq_default_open: false },
-    { faq_question: "What makes your Global Options different?",           faq_answer: "We combine our centralized strategic management with an extensive network of local affiliate offices, giving you global reach with nuanced regional expertise.",                                                       faq_default_open: false },
-    { faq_question: "How do I start with Global Distribution?",            faq_answer: "Simply reach out via our Contact page. One of our global strategy directors will evaluate your current footprint and design a customized expansion plan.",                                                            faq_default_open: false },
+    { faq_question: "Do you provide international tax advice?", faq_answer: "Yes, our certified experts provide comprehensive international tax planning and compliance services tailored to businesses operating across borders.", faq_default_open: false },
+    { faq_question: "How many countries does your distribution network cover?", faq_answer: "Our global distribution network spans over 170+ countries and supports more than 40 languages, ensuring localized reach on a massive scale.", faq_default_open: false },
+    { faq_question: "Can you assist with multilingual regulatory filings?", faq_answer: "Absolutely. We offer complete translation and typesetting services that meet the specific regulatory requirements of various international exchanges.", faq_default_open: false },
+    { faq_question: "What makes your Global Options different?", faq_answer: "We combine our centralized strategic management with an extensive network of local affiliate offices, giving you global reach with nuanced regional expertise.", faq_default_open: false },
+    { faq_question: "How do I start with Global Distribution?", faq_answer: "Simply reach out via our Contact page. One of our global strategy directors will evaluate your current footprint and design a customized expansion plan.", faq_default_open: false },
   ],
 };
 
 // ─── Resolve WordPress media ID → URL ────────────────────────────────────────
-
-const WP_API = "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2";
+// Handles: numeric ID, numeric-string ID, URL string, ACF image-object {url}
 
 const resolveMediaId = async (field: any): Promise<string> => {
   if (!field) return "";
+
+  // Already a full URL string
   if (typeof field === "string" && field.startsWith("http")) return field.trim();
-  if (typeof field === "object" && field !== null && field.url) return field.url.trim();
-  const id = typeof field === "number" ? field : parseInt(field as string, 10);
+
+  // ACF image-object → { url, id, ... }
+  if (typeof field === "object" && field !== null) {
+    if (field.url) return String(field.url).trim();
+    if (field.sizes?.medium) return String(field.sizes.medium).trim();
+    if (field.sizes?.thumbnail) return String(field.sizes.thumbnail).trim();
+  }
+
+  // Numeric or numeric-string media ID → fetch from WordPress
+  const id = typeof field === "number" ? field : parseInt(String(field), 10);
   if (!isNaN(id) && id > 0) {
     try {
       const res = await fetch(`${WP_API}/media/${id}`);
@@ -117,6 +130,7 @@ const resolveMediaId = async (field: any): Promise<string> => {
       return "";
     }
   }
+
   return "";
 };
 
@@ -135,82 +149,108 @@ export default function GlobalOptions() {
   useEffect(() => {
     const fetchAcf = async () => {
       try {
-        const res  = await fetch(`${WP_API}/pages/519?_fields=acf&_=${Date.now()}`);
+        // Fetch ACF data from page 519 (services global-options)
+        const res = await fetch(`${WP_API}/pages/519?_fields=acf&_=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        const acf  = json?.acf || {};
+        const acf = json?.acf;
+
+        if (!acf || Object.keys(acf).length === 0) {
+          console.warn("ACF GlobalOptions: No ACF data returned, using defaults.");
+          setLoading(false);
+          return;
+        }
 
         console.log("ACF GlobalOptions DATA:", acf);
 
-        // ── Resolve ALL images / icons in one parallel batch ──────────────
-        const distCards: any[]    = acf.services_global_options_distribution_cards || [];
-        const networkCards: any[] = acf.services_global_options_network_cards      || [];
+        // ── Collect all image fields to resolve in parallel ───────────────
+        const distCards: any[] = Array.isArray(acf.services_global_options_distribution_cards) ? acf.services_global_options_distribution_cards : [];
+        const networkCards: any[] = Array.isArray(acf.services_global_options_network_cards) ? acf.services_global_options_network_cards : [];
 
-        const [
-          bannerImageUrl,
-          ...restUrls
-        ] = await Promise.all([
+        const imagePromises = [
           resolveMediaId(acf.services_banner_bg_image),
-          ...distCards.map((c: any)    => resolveMediaId(c.card_icon)),
+          ...distCards.map((c: any) => resolveMediaId(c.card_icon)),
           ...networkCards.map((c: any) => resolveMediaId(c.network_icon)),
-        ]);
+        ];
 
-        const distIconUrls    = restUrls.slice(0, distCards.length);
+        const [bannerImageUrl, ...restUrls] = await Promise.all(imagePromises);
+
+        const distIconUrls = restUrls.slice(0, distCards.length);
         const networkIconUrls = restUrls.slice(distCards.length);
 
         // ── Build resolved distribution cards ─────────────────────────────
         const resolvedDistCards: DistributionCard[] = distCards.map((c: any, i: number) => ({
-          card_icon:        c.card_icon ?? "",
-          card_icon_url:    distIconUrls[i] ?? "",
-          card_title:       c.card_title?.trim() ?? "",
-          card_description: c.card_description?.trim() ?? "",
-          fallback_icon:    distributionFallbackIcons[i] ?? Globe2,
+          card_icon: c.card_icon ?? "",
+          card_icon_url: distIconUrls[i] || "",
+          card_title: (c.card_title || "").trim(),
+          card_description: (c.card_description || "").trim(),
+          fallback_icon: distributionFallbackIcons[i] ?? Globe2,
         }));
 
         // ── Build resolved network cards ───────────────────────────────────
         const resolvedNetworkCards: NetworkCard[] = networkCards.map((c: any, i: number) => ({
-          network_icon:     c.network_icon ?? "",
-          network_icon_url: networkIconUrls[i] ?? "",
-          network_title:    c.network_title?.trim() ?? "",
+          network_icon: c.network_icon ?? "",
+          network_icon_url: networkIconUrls[i] || "",
+          network_title: (c.network_title || "").trim(),
         }));
 
         // ── Build resolved FAQ list ────────────────────────────────────────
-        const faqList: FaqItem[] = (acf.services_global_options_faq_list || []).map((f: any) => ({
-          faq_question:     f.faq_question?.trim()  ?? "",
-          faq_answer:       f.faq_answer?.trim()    ?? "",
-          faq_default_open: f.faq_default_open      ?? false,
+        const rawFaq = Array.isArray(acf.services_global_options_faq_list) ? acf.services_global_options_faq_list : [];
+        const faqList: FaqItem[] = rawFaq.map((f: any) => ({
+          faq_question: (f.faq_question || "").trim(),
+          faq_answer: (f.faq_answer || "").trim(),
+          faq_default_open: !!f.faq_default_open,
         }));
 
+        // ── Update state with ACF data, fallback to defaults when empty ───
         setPageData((prev) => ({
           ...prev,
 
-          // Banner
-          services_banner_heading:       acf.services_banner_heading?.trim()       || prev.services_banner_heading,
-          services_banner_subtitle:      acf.services_banner_subtitle?.trim()      || prev.services_banner_subtitle,
-          services_banner_bg_image_url:  bannerImageUrl                            || prev.services_banner_bg_image_url,
-          services_banner_overlay_color: acf.services_banner_overlay_color?.trim() || prev.services_banner_overlay_color,
-          services_banner_text_color:    acf.services_banner_text_color?.trim()    || prev.services_banner_text_color,
-          services_banner_accent_color:  acf.services_banner_accent_color?.trim()  || prev.services_banner_accent_color,
+          // ── Banner ──────────────────────────────────────────────────────
+          services_banner_heading:
+            (acf.services_banner_heading || "").trim() || prev.services_banner_heading,
+          services_banner_subtitle:
+            (acf.services_banner_subtitle || "").trim() || prev.services_banner_subtitle,
+          services_banner_bg_image_url:
+            bannerImageUrl || prev.services_banner_bg_image_url,
+          services_banner_overlay_color:
+            (acf.services_banner_overlay_color || "").trim() || prev.services_banner_overlay_color,
+          services_banner_text_color:
+            (acf.services_banner_text_color || "").trim() || prev.services_banner_text_color,
+          services_banner_accent_color:
+            (acf.services_banner_accent_color || "").trim() || prev.services_banner_accent_color,
 
-          // Network (fields may not exist in ACF yet — fallback to defaults)
-          services_global_options_network_heading:     acf.services_global_options_network_heading?.trim()     || prev.services_global_options_network_heading,
-          services_global_options_network_description: acf.services_global_options_network_description?.trim() || prev.services_global_options_network_description,
-          services_global_options_network_cards:       resolvedNetworkCards.length ? resolvedNetworkCards : prev.services_global_options_network_cards,
+          // ── Network (ACF fields may not be exposed in REST yet) ─────────
+          services_global_options_network_heading:
+            (acf.services_global_options_network_heading || "").trim() || prev.services_global_options_network_heading,
+          services_global_options_network_description:
+            (acf.services_global_options_network_description || "").trim() || prev.services_global_options_network_description,
+          services_global_options_network_cards:
+            resolvedNetworkCards.length > 0 ? resolvedNetworkCards : prev.services_global_options_network_cards,
 
-          // Distribution
-          services_global_options_distribution_heading:      acf.services_global_options_distribution_heading?.trim()      || prev.services_global_options_distribution_heading,
-          services_global_options_distribution_bg_color:     acf.services_global_options_distribution_bg_color?.trim()     || prev.services_global_options_distribution_bg_color,
-          services_global_options_distribution_accent_color: acf.services_global_options_distribution_accent_color?.trim() || prev.services_global_options_distribution_accent_color,
-          services_global_options_distribution_cards:        resolvedDistCards.length ? resolvedDistCards : prev.services_global_options_distribution_cards,
+          // ── Distribution Suite ──────────────────────────────────────────
+          services_global_options_distribution_heading:
+            (acf.services_global_options_distribution_heading || "").trim() || prev.services_global_options_distribution_heading,
+          services_global_options_distribution_bg_color:
+            (acf.services_global_options_distribution_bg_color || "").trim() || prev.services_global_options_distribution_bg_color,
+          services_global_options_distribution_accent_color:
+            (acf.services_global_options_distribution_accent_color || "").trim() || prev.services_global_options_distribution_accent_color,
+          services_global_options_distribution_cards:
+            resolvedDistCards.length > 0 ? resolvedDistCards : prev.services_global_options_distribution_cards,
 
-          // FAQ
-          services_global_options_faq_heading:  acf.services_global_options_faq_heading?.trim()  || prev.services_global_options_faq_heading,
-          services_global_options_faq_subtitle: acf.services_global_options_faq_subtitle?.trim() || prev.services_global_options_faq_subtitle,
-          services_global_options_faq_list:     faqList.length ? faqList : prev.services_global_options_faq_list,
+          // ── FAQ ─────────────────────────────────────────────────────────
+          services_global_options_faq_heading:
+            (acf.services_global_options_faq_heading || "").trim() || prev.services_global_options_faq_heading,
+          services_global_options_faq_subtitle:
+            (acf.services_global_options_faq_subtitle || "").trim() || prev.services_global_options_faq_subtitle,
+          services_global_options_faq_list:
+            faqList.length > 0 ? faqList : prev.services_global_options_faq_list,
         }));
 
         // Set first open FAQ based on ACF faq_default_open flag
         const defaultOpenIdx = faqList.findIndex((f) => f.faq_default_open);
         setOpenFaq(defaultOpenIdx >= 0 ? defaultOpenIdx : 0);
+
       } catch (err) {
         console.error("ACF GlobalOptions Fetch Error:", err);
       } finally {
@@ -220,6 +260,8 @@ export default function GlobalOptions() {
 
     fetchAcf();
   }, []);
+
+  // ── Destructure for cleaner JSX ─────────────────────────────────────────────
 
   const {
     services_banner_heading,
@@ -238,6 +280,8 @@ export default function GlobalOptions() {
     services_global_options_faq_subtitle,
     services_global_options_faq_list,
   } = pageData;
+
+  // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
     <div className="w-full overflow-hidden">
@@ -302,10 +346,11 @@ export default function GlobalOptions() {
                         src={card.network_icon_url}
                         alt={card.network_title}
                         className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                       />
                     ) : (
                       <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-                        <div className="w-10 h-10 bg-primary rounded-full" />
+                        <Globe2 className="w-10 h-10 text-primary" />
                       </div>
                     )}
                   </div>

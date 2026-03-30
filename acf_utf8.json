@@ -1,0 +1,112 @@
+{
+  "id": 15,
+  "date": "2026-03-27T10:18:45",
+  "date_gmt": "2026-03-27T10:18:45",
+  "guid": {
+    "rendered": "https://dev-bapassociates.pantheonsite.io/?page_id=15"
+  },
+  "modified": "2026-03-27T10:27:42",
+  "modified_gmt": "2026-03-27T10:27:42",
+  "slug": "home-page",
+  "status": "publish",
+  "type": "page",
+  "link": "https://dev-bapassociates.pantheonsite.io/",
+  "title": {
+    "rendered": "Home page"
+  },
+  "content": {
+    "rendered": "",
+    "protected": false
+  },
+  "excerpt": {
+    "rendered": "",
+    "protected": false
+  },
+  "author": 1,
+  "featured_media": 0,
+  "parent": 0,
+  "menu_order": 0,
+  "comment_status": "closed",
+  "ping_status": "closed",
+  "template": "",
+  "meta": {
+    "_acf_changed": false,
+    "footnotes": ""
+  },
+  "class_list": [
+    "post-15",
+    "page",
+    "type-page",
+    "status-publish",
+    "hentry",
+    "entry"
+  ],
+  "acf": {
+    "icon_1": 17,
+    "icon_2": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/2.png",
+    "icon_3": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/3.png",
+    "icon_4": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/4.png",
+    "icon_5": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/5.png",
+    "icon_6": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/6.png",
+    "icon_7": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/7.png",
+    "icon_8": "https://dev-bapassociates.pantheonsite.io/wp-content/uploads/2026/03/8.png"
+  },
+  "_links": {
+    "self": [
+      {
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/pages/15",
+        "targetHints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/pages"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/types/page"
+      }
+    ],
+    "author": [
+      {
+        "embeddable": true,
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/users/1"
+      }
+    ],
+    "replies": [
+      {
+        "embeddable": true,
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/comments?post=15"
+      }
+    ],
+    "version-history": [
+      {
+        "count": 3,
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/pages/15/revisions"
+      }
+    ],
+    "predecessor-version": [
+      {
+        "id": 26,
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/pages/15/revisions/26"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2/media?parent=15"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}

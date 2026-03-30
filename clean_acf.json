@@ -1,0 +1,120 @@
+{
+  "hero_tagline": "STRATEGIC MANAGEMENT & INVESTOR RELATIONS",
+  "hero_title": "Maximizing Reach and Growth for Your Business.",
+  "hero_subtitle": "In Front of the Large Audience",
+  "hero_description": "We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally.",
+  "hero_primary_button_text": "Get Started",
+  "hero_primary_button_link": "https://www.bapassociates.co.uk/contact",
+  "hero_primary_button_icon": 245,
+  "hero_secondary_button_text": "Learn More",
+  "hero_secondary_button_link": "https://www.bapassociates.co.uk/about",
+  "services_section_title": "Efficient Solution So You Can Focus On",
+  "services_highlight_text": "RUNNING YOUR BUSINESS!",
+  "service_1_icon": 337,
+  "service_1_title": "Targeted Visibility",
+  "service_1_point_1": "News Distribution To Increase Visibility",
+  "service_1_point_1_icon": 337,
+  "service_1_point_2": "Earnings Releases To Meet Disclosure",
+  "service_1_point_2_icon": 337,
+  "service_1_point_3": "Investor Targeting Distribution Lists",
+  "service_1_point_3_icon": 337,
+  "service_2_icon": 338,
+  "service_2_title": "Filing & Compliance",
+  "service_2_point_1": "Precision Typesetting",
+  "service_2_point_1_icon": 337,
+  "service_2_point_2": "EDGAR Filing & Compliance",
+  "service_2_point_2_icon": 337,
+  "service_2_point_3": "XBRL Filing Solutions",
+  "service_2_point_3_icon": 337,
+  "service_2_point_4": "Annual Report Printing & Services",
+  "service_2_point_4_icon": 337,
+  "service_3_icon": 339,
+  "service_3_title": "Communication",
+  "service_3_point_1": "Webcasting",
+  "service_3_point_1_icon": 337,
+  "service_3_point_2": "Teleconferencing",
+  "service_3_point_2_icon": 337,
+  "service_3_point_3": "Virtual Retail Investor Conferences",
+  "service_3_point_3_icon": 337,
+  "about_image": 358,
+  "about_heading": "Your Growth, <br><span class=\"text-blue-accent\">Our Expertise.</span>",
+  "about_description": "At BAP & Associates LIMITED, we believe that true success is built on a foundation of strategic planning, impeccable execution, and transparent communication. Our tailored solutions are designed not just to meet your immediate needs, but to propel your business into its next phase of exponential growth.",
+  "about_points": [
+    {
+      "point_icon": 359,
+      "point_text": "Global Distribution Networks"
+    },
+    {
+      "point_icon": 359,
+      "point_text": "Comprehensive Financial Reporting"
+    },
+    {
+      "point_icon": 359,
+      "point_text": "Strategic Brand Management"
+    }
+  ],
+  "about_button_text": "Discover Our Story",
+  "about_button_link": "https://www.bapassociates.co.uk/about",
+  "about_stat_number": "98%",
+  "about_stat_text": "Client Satisfaction",
+  "client_satisfaction_icon": 359,
+  "services_heading": "Certified public accountants in United States",
+  "services_description": "Delivering premium financial, consulting, and advisory services to ensure full compliance and strategic advantage.",
+  "services_list": [
+    {
+      "service_icon": 17,
+      "service_title": "Bookkeeping"
+    },
+    {
+      "service_icon": 18,
+      "service_title": "Payroll Services"
+    },
+    {
+      "service_icon": 19,
+      "service_title": "Tax Planning"
+    },
+    {
+      "service_icon": 20,
+      "service_title": "Audit & Assurance"
+    },
+    {
+      "service_icon": 21,
+      "service_title": "Financial Statement"
+    },
+    {
+      "service_icon": 22,
+      "service_title": "Business Advisory"
+    },
+    {
+      "service_icon": 23,
+      "service_title": "Tech Consulting"
+    },
+    {
+      "service_icon": 24,
+      "service_title": "Outsourced CFO"
+    }
+  ],
+  "cta_heading": "Let Us Know How We Can Assist Your Company",
+  "cta_placeholder": "Enter your email address",
+  "cta_button_text": "Subscribe Now",
+  "cta_button_link": "https://www.bapassociates.co.uk/",
+  "cta_background_color": "#6DBE45",
+  "partners_heading": "Our Partnership with Major Media Outlets",
+  "partners_list": [
+    {
+      "partner_name": "Google"
+    },
+    {
+      "partner_name": "Yahoo"
+    },
+    {
+      "partner_name": "MarketWatch"
+    },
+    {
+      "partner_name": "Bloomberg"
+    },
+    {
+      "partner_name": "MSN"
+    }
+  ]
+}

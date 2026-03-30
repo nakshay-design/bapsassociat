@@ -1,5 +1,6 @@
 import { FadeIn } from "@/components/FadeIn";
-import { CheckCircle2, Target, Users, Shield, TrendingUp } from "lucide-react";
+import { Target, Users, Shield, TrendingUp } from "lucide-react";
+import IconImage from "@/components/IconImage";
 import { useMeta } from "@/hooks/useMeta";
 import { useEffect, useState } from "react";
 
@@ -93,11 +94,12 @@ const defaultData: AboutData = {
 
 const resolveImageUrl = async (field: any): Promise<string> => {
   if (!field) return "";
-  if (typeof field === "string") return field.trim();
+  if (typeof field === "string" && field.startsWith("http")) return field.trim();
   if (typeof field === "object" && field.url) return field.url.trim();
-  if (typeof field === "number") {
+  if (typeof field === "number" || (typeof field === "string" && !isNaN(Number(field)))) {
+    const id = typeof field === "number" ? field : Number(field);
     try {
-      const res = await fetch(`/wp-json/wp/v2/media/${field}`);
+      const res = await fetch(`/wp-json/wp/v2/media/${id}`);
       const data = await res.json();
       return data?.source_url || "";
     } catch {
@@ -124,27 +126,24 @@ export default function About() {
 
         console.log("ACF ABOUT DATA:", acf);
 
-        // Resolve images (content images + commitment icons + banner)
         const [
           image1Url,
           image2Url,
-          bannerImageUrl
+          bannerImageUrl,
+          ...cardIconUrls
         ] = await Promise.all([
           resolveImageUrl(acf.about_content_image_1),
           resolveImageUrl(acf.about_content_image_2),
-          resolveImageUrl(acf.about_banner_image)
+          resolveImageUrl(acf.about_banner_image),
+          ...(acf.about_commitment_cards || []).map((card: any) => resolveImageUrl(card.card_icon))
         ]);
 
-        const resolvedCards = await Promise.all(
-          (acf.about_commitment_cards || []).map(async (card: any, index: number) => {
-            const fallbackIcons = [Users, Target, TrendingUp, Shield];
-            return {
-              ...card,
-              card_icon_url: await resolveImageUrl(card.card_icon),
-              fallback_icon: fallbackIcons[index] || CheckCircle2
-            };
-          })
-        );
+        const fallbackIcons = [Users, Target, TrendingUp, Shield];
+        const resolvedCards = (acf.about_commitment_cards || []).map((card: any, index: number) => ({
+          ...card,
+          card_icon_url: cardIconUrls[index],
+          fallback_icon: fallbackIcons[index] || Users
+        }));
 
         setAboutData((prev) => ({
           ...prev,
@@ -277,12 +276,13 @@ export default function About() {
               return (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="bg-white p-8 rounded-3xl shadow-lg border border-border h-full text-center hover:-translate-y-2 transition-transform duration-300">
-                    <div className="w-16 h-16 mx-auto bg-accent/10 text-accent rounded-full flex items-center justify-center mb-6">
-                      {value.card_icon_url ? (
-                        <img src={value.card_icon_url} alt={value.card_title} className="w-8 h-8 object-contain" />
-                      ) : (
-                        FallbackIcon && <FallbackIcon className="w-8 h-8" />
-                      )}
+                    <div className="w-16 h-16 mx-auto mb-6">
+                      <IconImage 
+                        src={value.card_icon_url} 
+                        alt={value.card_title} 
+                        className="bg-accent/10 p-4"
+                        size={64}
+                      />
                     </div>
                     <h3 className="text-xl font-bold text-heading mb-3">{value.card_title}</h3>
                     <p className="text-foreground">{value.card_description}</p>

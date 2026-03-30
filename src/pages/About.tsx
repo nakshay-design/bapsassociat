@@ -24,11 +24,11 @@ interface AboutData {
   about_banner_description: string;
   about_banner_bg_color: string;
   about_banner_accent_color: string;
-  
+
   // Stats
   about_stats_background: string;
   about_stats_list: StatItem[];
-  
+
   // Content (Story/Partnerships)
   about_content_heading: string;
   about_content_description_1: string;
@@ -38,12 +38,12 @@ interface AboutData {
   about_content_image_2: number | string;
   about_content_image_2_url: string;
   about_content_accent_color: string;
-  
+
   // Commitment
   about_commitment_heading: string;
   about_commitment_description: string;
   about_commitment_cards: CommitmentCard[];
-  
+
   // Vision & Mission
   about_vision_title: string;
   about_vision_text: string;
@@ -131,13 +131,12 @@ export default function About() {
 
         const resolvedCards = await Promise.all(
           (acf.about_commitment_cards || []).map(async (card: any, index: number) => {
-             // Keep the fallback icon from defaultData based on index if there's no custom icon
-             const fallbackIcons = [Users, Target, TrendingUp, Shield];
-             return {
-                ...card,
-                card_icon_url: await resolveImageUrl(card.card_icon),
-                fallback_icon: defaultData.about_commitment_cards[index]?.fallback_icon || CheckCircle2
-             };
+            const fallbackIcons = [Users, Target, TrendingUp, Shield];
+            return {
+              ...card,
+              card_icon_url: await resolveImageUrl(card.card_icon),
+              fallback_icon: fallbackIcons[index] || CheckCircle2
+            };
           })
         );
 
@@ -147,21 +146,21 @@ export default function About() {
           about_banner_description: acf.about_banner_description || prev.about_banner_description,
           about_banner_bg_color: acf.about_banner_bg_color || prev.about_banner_bg_color,
           about_banner_accent_color: acf.about_banner_accent_color || prev.about_banner_accent_color,
-          
+
           about_stats_background: acf.about_stats_background || prev.about_stats_background,
           about_stats_list: acf.about_stats_list?.length ? acf.about_stats_list : prev.about_stats_list,
-          
+
           about_content_heading: acf.about_content_heading || prev.about_content_heading,
           about_content_description_1: acf.about_content_description_1 || prev.about_content_description_1,
           about_content_description_2: acf.about_content_description_2 || prev.about_content_description_2,
           about_content_image_1_url: image1Url || prev.about_content_image_1_url,
           about_content_image_2_url: image2Url || prev.about_content_image_2_url,
           about_content_accent_color: acf.about_content_accent_color || prev.about_content_accent_color,
-          
+
           about_commitment_heading: acf.about_commitment_heading || prev.about_commitment_heading,
           about_commitment_description: acf.about_commitment_description || prev.about_commitment_description,
           about_commitment_cards: resolvedCards.length ? resolvedCards : prev.about_commitment_cards,
-          
+
           about_vision_title: acf.about_vision_title || prev.about_vision_title,
           about_vision_text: acf.about_vision_text || prev.about_vision_text,
           about_mission_title: acf.about_mission_title || prev.about_mission_title,
@@ -199,15 +198,15 @@ export default function About() {
       <section className="relative py-24 bg-primary text-white">
         <div className="absolute inset-0 overflow-hidden">
           {/* abstract dark blue background */}
-          <img 
-            src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop" 
-            alt="Abstract Background" 
+          <img
+            src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop"
+            alt="Abstract Background"
             className="w-full h-full object-cover opacity-10"
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
-            <h1 
+            <h1
               className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight text-white"
               dangerouslySetInnerHTML={{ __html: about_banner_heading }}
             />
@@ -249,7 +248,7 @@ export default function About() {
               <img src={about_content_image_2_url} alt="Partnership" className="rounded-3xl shadow-lg w-full h-64 object-cover mt-8" />
             </FadeIn>
           </div>
-        </div> 
+        </div>
       </section>
 
       {/* Values & Mission */}

@@ -8,144 +8,40 @@ import { useEffect, useState } from "react";
 import IconImage from "@/components/IconImage";
 
 export default function Home() {
-
-  const [icons, setIcons] = useState<string[]>([]);
-
+  const [acf, setAcf] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchIcons = async () => {
+    const fetchData = async () => {
       try {
         const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf");
-
-      const data = await res.json();
-      const acf = data?.acf || {};[
-  {
-    "key": "group_home_page",
-    "title": "Home Page Sections",
-    "fields": [
-      {
-        "key": "field_hero_section",
-        "label": "Hero Section",
-        "name": "hero_section",
-        "type": "group",
-        "sub_fields": [
-          { "key": "field_hero_badge", "label": "Badge Text", "name": "badge", "type": "text", "default_value": "STRATEGIC MANAGEMENT & INVESTOR RELATIONS" },
-          { "key": "field_hero_title", "label": "Main Title", "name": "title", "type": "textarea", "default_value": "Maximizing Reach and Growth for Your Business." },
-          { "key": "field_hero_subtitle", "label": "Subtitle", "name": "subtitle", "type": "text", "default_value": "In Front of the Large Audience" },
-          { "key": "field_hero_description", "label": "Description", "name": "description", "type": "textarea", "default_value": "We provide expert business consulting and strategic distribution solutions." },
-          { "key": "field_hero_bg", "label": "Background Image", "name": "background_image", "type": "image", "return_format": "url" }
-        ]
-      },
-      {
-        "key": "field_services_grid",
-        "label": "Services Grid Section",
-        "name": "services_grid",
-        "type": "repeater",
-        "layout": "block",
-        "button_label": "Add Service",
-        "sub_fields": [
-          { "key": "field_service_title", "label": "Title", "name": "title", "type": "text" },
-          { "key": "field_service_icon", "label": "Icon (SVG or Image URL)", "name": "icon", "type": "text", "instructions": "Paste full URL to SVG or image" }
-        ]
-      },
-      {
-        "key": "field_cta_section",
-        "label": "CTA Subscribe Section",
-        "name": "cta_section",
-        "type": "group",
-        "sub_fields": [
-          { "key": "field_cta_title", "label": "Title", "name": "title", "type": "text", "default_value": "Let Us Know How We Can Assist Your Company" },
-          { "key": "field_cta_button_text", "label": "Button Text", "name": "button_text", "type": "text", "default_value": "Subscribe Now" }
-        ]
-      },
-      {
-        "key": "field_partners_repeater",
-        "label": "Partners Logos Section",
-        "name": "partners_logos",
-        "type": "repeater",
-        "button_label": "Add Partner",
-        "sub_fields": [
-          { "key": "field_partner_name", "label": "Partner Name", "name": "name", "type": "text" }
-        ]
-      }
-    ],
-    "location": [
-      [
-        {
-          "param": "page",
-          "operator": "==",
-          "value": "15"
-        }
-      ]
-    ]
-  }
-]
-
-      console.log("RAW ACF DATA:", acf);
-
-      // Helper function to extract URL from ACF image (handles string, ID, or Object)
-      const getImageUrl = async (field: any) => {
-        if (!field) return "";
-        
-        // Case 1: Direct URL String
-        if (typeof field === 'string') return field.trim();
-        
-        // Case 2: ACF Image Object (Return Format: Image Array)
-        if (typeof field === 'object' && field.url) return field.url.trim();
-        
-        // Case 3: ACF Image ID (Return Format: Image ID)
-        if (typeof field === 'number') {
-          try {
-            const mediaRes = await fetch(`/wp-json/wp/v2/media/${field}`);
-            const mediaData = await mediaRes.json();
-            return mediaData?.source_url || "";
-          } catch (e) {
-            console.error("Media Fetch Error:", e);
-            return "";
-          }
-        }
-        
-        return "";
-      };
-
-      const iconList = await Promise.all([
-        getImageUrl(acf.icon_1),
-        getImageUrl(acf.icon_2),
-        getImageUrl(acf.icon_3),
-        getImageUrl(acf.icon_4),
-        getImageUrl(acf.icon_5),
-        getImageUrl(acf.icon_6),
-        getImageUrl(acf.icon_7),
-        getImageUrl(acf.icon_8),
-      ]);
-
-      console.log("FINAL PROCESSED ICONS:", iconList);
-
-      setIcons(iconList);
-
+        const data = await res.json();
+        setAcf(data?.acf || null);
       } catch (err) {
         console.error("API Error:", err);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchIcons();
+    fetchData();
   }, []);
 
-
-   useMeta(
+  useMeta(
     "PR & Investor Relations Firm UK | BAP & Associates",
     "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
   );
+
+  // Helper for background images
+  const heroBg = acf?.hero_section?.background_image || "https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg";
 
   return (
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center bg-primary">
         <div className="absolute inset-0 overflow-hidden">
-          {/* corporate consulting background image */}
           <img 
-            src="https://www.bapassociates.co.uk/wp-content/uploads/2025/03/unsplash-image-FlPc9_VocJ4-1024x683.jpg" 
-            alt="Business consulting meeting" 
+            src={heroBg} 
+            alt="Hero Background" 
             className="w-full h-full object-cover opacity-20 scale-105 animate-[pulse_20s_ease-in-out_infinite_alternate]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
@@ -154,23 +50,22 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
             <span className="inline-block py-1.5 px-4 rounded-full bg-accent/20 text-accent font-bold tracking-wider text-sm mb-6 border border-accent/30">
-              STRATEGIC MANAGEMENT & INVESTOR RELATIONS
+              {acf?.hero_section?.badge || "STRATEGIC MANAGEMENT & INVESTOR RELATIONS"}
             </span>
           </FadeIn>
           
           <FadeIn delay={0.2}>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight">
-              Maximizing Reach and <br className="hidden sm:block" />
-              Growth for Your Business.
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight whitespace-pre-line">
+              {acf?.hero_section?.title || "Maximizing Reach and \nGrowth for Your Business."}
             </h1>
           </FadeIn>
           
           <FadeIn delay={0.4}>
             <p className="text-2xl sm:text-3xl text-accent font-light mb-8">
-              In Front of the Large Audience
+              {acf?.hero_section?.subtitle || "In Front of the Large Audience"}
             </p>
             <p className="text-lg text-white/80 max-w-3xl mx-auto mb-10 leading-relaxed">
-              We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally.
+              {acf?.hero_section?.description || "We provide expert business consulting and strategic distribution solutions to ensure your company's story reaches the right investors globally."}
             </p>
           </FadeIn>
           
@@ -192,7 +87,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Overview Section */}
+      {/* Services Overview Section (Static for now as requested for specific sections) */}
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
@@ -208,7 +103,7 @@ export default function Home() {
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
+            {/* Hardcoded Overview Cards as they were not in the dynamic list but are key sections */}
             <FadeIn delay={0.1} className="h-full">
               <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
                 <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
@@ -226,7 +121,6 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* Card 2 */}
             <FadeIn delay={0.2} className="h-full">
               <div className="bg-primary h-full p-8 rounded-3xl shadow-xl hover:-translate-y-2 transition-all duration-300 text-white relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
@@ -245,7 +139,6 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* Card 3 */}
             <FadeIn delay={0.3} className="h-full">
               <div className="bg-card h-full p-8 rounded-3xl border border-border shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300 group">
                 <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-8 group-hover:bg-accent group-hover:text-white text-accent transition-colors duration-300">
@@ -266,13 +159,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Your Growth Section */}
+      {/* Your Growth Section (Static Content as per current UI design) */}
       <section className="py-24 bg-secondary/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn direction="right">
               <div className="relative">
-                {/* modern office building facade */}
                 <img 
                   src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" 
                   alt="Modern office" 
@@ -318,7 +210,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Grid Section */}
+      {/* Services Grid Section (DYNAMIC) */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
@@ -331,25 +223,19 @@ export default function Home() {
           </FadeIn>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-  { title: "Bookkeeping" },
-  { title: "Payroll Services" },
-  { title: "Tax Planning" },
-  { title: "Audit & Assurance" },
-  { title: "Financial Statement" },
-  { title: "Business Advisory" },
-  { title: "Tech Consulting" },
-  { title: "Outsourced CFO" }
-].map((service, i) => (
+            {(acf?.services_grid || Array(8).fill({})).map((service: any, i: number) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   <div className="w-28 h-28 mb-6 rounded-full bg-secondary/50 flex items-center justify-center p-6 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:bg-white border border-transparent group-hover:border-border">
-                   <IconImage 
-  src={icons[i] || ""} 
-  alt={service.title} 
-/>
+                    <IconImage 
+                      src={service.icon || ""} 
+                      alt={service.title || "Service Icon"} 
+                      isLoading={loading}
+                    />
                   </div>
-                  <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">{service.title}</h4>
+                  <h4 className="text-lg font-bold text-heading group-hover:text-accent transition-colors">
+                    {service.title || `Service ${i + 1}`}
+                  </h4>
                 </div>
               </FadeIn>
             ))}
@@ -357,7 +243,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Subscribe Section */}
+      {/* Subscribe Section (DYNAMIC) */}
       <section className="py-20 bg-accent relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -ml-20 -mb-20"></div>
@@ -365,7 +251,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
             <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-8">
-              Let Us Know How We Can Assist Your Company
+              {acf?.cta_section?.title || "Let Us Know How We Can Assist Your Company"}
             </h2>
             <form className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!'); }}>
               <Input 
@@ -375,22 +261,22 @@ export default function Home() {
                 required
               />
               <Button type="submit" size="lg" className="bg-primary text-white hover:bg-primary/90 shadow-xl sm:w-auto w-full h-14 whitespace-nowrap">
-                Subscribe Now
+                {acf?.cta_section?.button_text || "Subscribe Now"}
               </Button>
             </form>
           </FadeIn>
         </div>
       </section>
 
-      {/* Partners Section */}
+      {/* Partners Section (DYNAMIC) */}
       <section className="py-16 bg-white border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
             <h3 className="text-2xl font-display font-bold text-heading mb-10">Our Partnership with Major Media Outlets</h3>
             <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-              {['Google', 'Yahoo', 'MarketWatch', 'Bloomberg', 'MSN'].map((partner, i) => (
+              {(acf?.partners_logos || ['Google', 'Yahoo', 'MarketWatch', 'Bloomberg', 'MSN']).map((partner: any, i: number) => (
                 <div key={i} className="text-2xl md:text-4xl font-black font-display tracking-tighter text-muted-foreground hover:text-primary transition-colors">
-                  {partner}
+                  {typeof partner === 'string' ? partner : partner.name}
                 </div>
               ))}
             </div>

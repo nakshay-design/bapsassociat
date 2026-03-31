@@ -23,7 +23,7 @@ interface ContactFormValues {
 }
 
 interface OfficeItem {
-  icon: number | string;
+  icon?: number | string;
   icon_url?: string;
   title: string;
   address: string;
@@ -32,9 +32,16 @@ interface OfficeItem {
 }
 
 interface SocialLink {
-  icon: number | string;
+  icon?: number | string;
   icon_url?: string;
   url: string;
+}
+
+interface FormStringMap {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
 }
 
 interface ContactData {
@@ -51,11 +58,13 @@ interface ContactData {
   contact_offices_description: string;
   contact_offices_list: OfficeItem[];
 
-  // Socials
+  social_heading: string;
   contact_social_links: SocialLink[];
 
   // Form Section
   contact_form_title: string;
+  form_labels: FormStringMap;
+  form_placeholders: FormStringMap;
   contact_button_text: string;
 }
 
@@ -72,25 +81,24 @@ const defaultData: ContactData = {
   contact_offices_title: "Our Offices",
   contact_offices_description: "Whether you have a question about features, trials, pricing, need a demo, or anything else, our team is ready to answer all your questions.",
   contact_offices_list: [
-    {
-      icon: "",
-      title: "Atlanta Office (US)",
-      address: "12460 Crabapple Rd\nAtlanta, GA 30004",
-      phone: "+1 (404) 702-4270",
-      email: ""
-    },
-    {
-      icon: "",
-      title: "London Office (UK)",
-      address: "25 Old Broad St\nLondon EC2N-1HN, UK",
-      phone: "+44 20 7877 0450",
-      email: "info@BAPassociates.co.uk"
-    },
+    { title: "Atlanta Office (US)", address: "12460 Crabapple Rd\nAtlanta, GA 30004", phone: "+1 (404) 702-4270", email: "" },
+    { title: "London Office (UK)", address: "25 Old Broad St\nLondon EC2N-1HN, UK", phone: "+44 20 7877 0450", email: "info@BAPassociates.co.uk" },
   ],
-
+  social_heading: "Follow Us",
   contact_social_links: [],
-
   contact_form_title: "Send us a message",
+  form_labels: {
+    name: "Your Name",
+    email: "Email Address",
+    subject: "Subject",
+    message: "Message"
+  },
+  form_placeholders: {
+    name: "John Doe",
+    email: "john@company.com",
+    subject: "How can we help?",
+    message: "Tell us about your project..."
+  },
   contact_button_text: "Send Message",
 };
 
@@ -150,19 +158,30 @@ export default function Contact() {
         const res = await fetch(`${WP_API}/pages/643?_fields=acf&_=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        const acf = json?.acf;
+        const rawAcf = json?.acf;
 
-        if (!acf || Object.keys(acf).length === 0) {
-          console.warn("ACF Contact: No ACF data returned, using defaults.");
+        if (!rawAcf || Object.keys(rawAcf).length === 0) {
           setLoading(false);
           return;
         }
 
-        console.log("ACF Contact DATA:", acf);
+        const gOffices = rawAcf.group_contact_offices_form_section || {};
+        const gForm = rawAcf.group_contact_form_section || {};
 
-        // ── Collect all image fields to resolve in parallel ───────────────
-        const officesList = Array.isArray(acf.contact_offices_list) ? acf.contact_offices_list : [];
-        const socialLinks = Array.isArray(acf.contact_social_links) ? acf.contact_social_links : [];
+        const acf = {
+          ...rawAcf,
+          ...(rawAcf.group_contact_banner || {}),
+          ...gOffices,
+          ...gForm
+        };
+
+        console.log("RESOLVED CONTACT DATA:", acf);
+
+        const officesList = Array.isArray(acf.offices) ? acf.offices
+          : Array.isArray(acf.contact_offices_list) ? acf.contact_offices_list : [];
+
+        const socialLinks = Array.isArray(acf.social_links) ? acf.social_links
+          : Array.isArray(acf.contact_social_links) ? acf.contact_social_links : [];
 
         const imagePromises = [
           resolveMediaId(acf.contact_banner_bg_image),
@@ -175,22 +194,6 @@ export default function Contact() {
         const officeIconUrls = restUrls.slice(0, officesList.length);
         const socialIconUrls = restUrls.slice(officesList.length);
 
-        // ── Build resolved lists ───────────────────────────────
-        const resolvedOffices: OfficeItem[] = officesList.map((o: any, i: number) => ({
-          icon: o.icon || "",
-          icon_url: officeIconUrls[i] || "",
-          title: (o.title || "").trim(),
-          address: (o.address || "").trim(),
-          phone: (o.phone || "").trim(),
-          email: (o.email || "").trim(),
-        }));
-
-        const resolvedSocials: SocialLink[] = socialLinks.map((s: any, i: number) => ({
-          icon: s.icon || "",
-          icon_url: socialIconUrls[i] || "",
-          url: (s.url || "#").trim() || "#",
-        }));
-
         setPageData((prev) => ({
           ...prev,
 
@@ -202,17 +205,37 @@ export default function Contact() {
           contact_banner_padding: (acf.contact_banner_padding || "").trim() || prev.contact_banner_padding,
           contact_banner_bg_image_url: bannerBgUrl || prev.contact_banner_bg_image_url,
 
-          // Offices
-          contact_offices_title: (acf.contact_offices_title || "").trim() || prev.contact_offices_title,
-          contact_offices_description: (acf.contact_offices_description || "").trim() || prev.contact_offices_description,
-          contact_offices_list: resolvedOffices.length > 0 ? resolvedOffices : prev.contact_offices_list,
+          contact_offices_title: acf.left_heading || acf.contact_offices_title || prev.contact_offices_title,
+          contact_offices_description: acf.left_description || acf.contact_offices_description || prev.contact_offices_description,
 
-          // Socials
-          contact_social_links: resolvedSocials,
+          contact_offices_list: officesList.length > 0 ? officesList.map((o: any, i: number) => ({
+            icon_url: officeIconUrls[i] || "",
+            title: o.title || o.office_title || "",
+            address: o.address || o.office_address || "",
+            phone: o.phone || o.office_phone || "",
+            email: o.email || o.office_email || "",
+          })) : prev.contact_offices_list,
 
-          // Form
-          contact_form_title: (acf.contact_form_title || "").trim() || prev.contact_form_title,
-          contact_button_text: (acf.contact_button_text || "").trim() || prev.contact_button_text,
+          social_heading: acf.social_heading || prev.social_heading,
+          contact_social_links: socialLinks.map((s: any, i: number) => ({
+            icon_url: socialIconUrls[i] || "",
+            url: s.url || s.social_url || "#",
+          })),
+
+          contact_form_title: acf.form_title || acf.contact_form_title || prev.contact_form_title,
+          form_labels: acf.form_labels ? {
+            name: acf.form_labels.name || prev.form_labels.name,
+            email: acf.form_labels.email || prev.form_labels.email,
+            subject: acf.form_labels.subject || prev.form_labels.subject,
+            message: acf.form_labels.message || prev.form_labels.message,
+          } : prev.form_labels,
+          form_placeholders: acf.form_placeholders ? {
+            name: acf.form_placeholders.name || prev.form_placeholders.name,
+            email: acf.form_placeholders.email || prev.form_placeholders.email,
+            subject: acf.form_placeholders.subject || prev.form_placeholders.subject,
+            message: acf.form_placeholders.message || prev.form_placeholders.message,
+          } : prev.form_placeholders,
+          contact_button_text: acf.button_text || acf.contact_button_text || prev.contact_button_text,
         }));
 
       } catch (err) {
@@ -226,18 +249,11 @@ export default function Contact() {
   }, []);
 
   const {
-    contact_banner_heading,
-    contact_banner_bg_color,
-    contact_banner_text_color,
-    contact_banner_accent_color,
-    contact_banner_padding,
-    contact_banner_bg_image_url,
-    contact_offices_title,
-    contact_offices_description,
-    contact_offices_list,
-    contact_social_links,
-    contact_form_title,
-    contact_button_text,
+    contact_banner_heading, contact_banner_bg_color, contact_banner_text_color,
+    contact_banner_accent_color, contact_banner_padding, contact_banner_bg_image_url,
+    contact_offices_title, contact_offices_description, contact_offices_list,
+    social_heading, contact_social_links, contact_form_title,
+    form_labels, form_placeholders, contact_button_text,
   } = pageData;
 
   const heroPadding = contact_banner_padding || "py-32";
@@ -325,7 +341,7 @@ export default function Contact() {
               {/* Socials */}
               {contact_social_links.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-bold text-heading mb-4">Follow Us</h3>
+                  <h3 className="text-lg font-bold text-heading mb-4">{social_heading}</h3>
                   <div className="flex gap-4">
                     {contact_social_links.map((social, idx) => {
                       const FallbackIcons = [Facebook, Twitter, Instagram, Linkedin];
@@ -359,46 +375,23 @@ export default function Contact() {
           {/* Right: Contact Form */}
           <FadeIn direction="left">
             <div className="bg-white p-10 md:p-12 rounded-3xl shadow-2xl border border-border">
-              <h2 className="text-3xl font-display font-bold text-heading mb-8">
-                {contact_form_title}
-              </h2>
-
+              <h2 className="text-3xl font-display font-bold text-heading mb-8">{contact_form_title}</h2>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-heading mb-2">Your Name</label>
-                  <Input
-                    {...register("name", { required: true })}
-                    placeholder="John Doe"
-                    className={errors.name ? "border-destructive focus-visible:ring-destructive/20" : ""}
-                  />
+                  <label className="block text-sm font-semibold text-heading mb-2">{form_labels.name}</label>
+                  <Input {...register("name", { required: true })} placeholder={form_placeholders.name} className={errors.name ? "border-destructive focus-visible:ring-destructive/20" : ""} />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-semibold text-heading mb-2">Email Address</label>
-                  <Input
-                    type="email"
-                    {...register("email", { required: true })}
-                    placeholder="john@company.com"
-                    className={errors.email ? "border-destructive focus-visible:ring-destructive/20" : ""}
-                  />
+                  <label className="block text-sm font-semibold text-heading mb-2">{form_labels.email}</label>
+                  <Input type="email" {...register("email", { required: true })} placeholder={form_placeholders.email} className={errors.email ? "border-destructive focus-visible:ring-destructive/20" : ""} />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-semibold text-heading mb-2">Subject</label>
-                  <Input
-                    {...register("subject", { required: true })}
-                    placeholder="How can we help?"
-                    className={errors.subject ? "border-destructive focus-visible:ring-destructive/20" : ""}
-                  />
+                  <label className="block text-sm font-semibold text-heading mb-2">{form_labels.subject}</label>
+                  <Input {...register("subject", { required: true })} placeholder={form_placeholders.subject} className={errors.subject ? "border-destructive focus-visible:ring-destructive/20" : ""} />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-semibold text-heading mb-2">Message</label>
-                  <Textarea
-                    {...register("message", { required: true })}
-                    placeholder="Tell us about your project..."
-                    className={errors.message ? "border-destructive focus-visible:ring-destructive/20" : ""}
-                  />
+                  <label className="block text-sm font-semibold text-heading mb-2">{form_labels.message}</label>
+                  <Textarea {...register("message", { required: true })} placeholder={form_placeholders.message} className={`min-h-[150px] ${errors.message ? "border-destructive focus-visible:ring-destructive/20" : ""}`} />
                 </div>
 
                 <Button

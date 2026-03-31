@@ -40,6 +40,7 @@ interface IrPrData {
 
   ir_pr_sections: IrPrSection[];
 
+  ir_pr_filing_heading: string;
   ir_pr_filing_description: string;
   ir_pr_filing_cards: FilingCard[];
   ir_pr_filing_bg_color: string;
@@ -104,6 +105,7 @@ const defaultData: IrPrData = {
     },
   ],
 
+  ir_pr_filing_heading: "Regulatory Compliance & Filings",
   ir_pr_filing_description:
     "Flawless execution of filing, typesetting, and financial print for all major exchanges including NYSE, NASDAQ, OTC, and TSX.",
   ir_pr_filing_cards: [
@@ -258,6 +260,8 @@ export default function IrPrSolutions() {
           ir_pr_sections: resolvedSections.length > 0 ? resolvedSections : prev.ir_pr_sections,
 
           // Filing Section
+          ir_pr_filing_heading:
+            (acf.ir_pr_filing_heading || "").trim() || prev.ir_pr_filing_heading,
           ir_pr_filing_description: 
             (acf.ir_pr_filing_description || "").trim() || prev.ir_pr_filing_description,
           ir_pr_filing_bg_color: 
@@ -288,6 +292,7 @@ export default function IrPrSolutions() {
     services_ir_pr_banner_text_color,
     services_ir_pr_banner_accent_color,
     ir_pr_sections,
+    ir_pr_filing_heading,
     ir_pr_filing_description,
     ir_pr_filing_cards,
     ir_pr_filing_bg_color,
@@ -385,8 +390,11 @@ export default function IrPrSolutions() {
       <section className="py-24 text-white" style={{ backgroundColor: ir_pr_filing_bg_color }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-8">
-              Regulatory Compliance & Filings
+            <h2 
+              className="text-3xl md:text-5xl font-display font-bold mb-8"
+              style={{ color: ir_pr_filing_accent_color }}
+            >
+              {ir_pr_filing_heading}
             </h2>
             <p className="text-xl max-w-3xl mx-auto mb-12" style={{ color: "rgba(255,255,255,0.8)" }}>
               {ir_pr_filing_description}

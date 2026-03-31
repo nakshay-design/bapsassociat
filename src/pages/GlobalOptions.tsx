@@ -144,19 +144,29 @@ export default function GlobalOptions() {
   const [pageData, setPageData] = useState<GlobalOptionsData>(defaultData);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [loading, setLoading] = useState(true);
+  const [seo, setSeo] = useState({
+    title: "Global PR Distribution Services | BAP & Associates",
+    description: "Expand your reach in 170+ countries with multilingual PR distribution. Connect with global audiences—start your campaign with us today!"
+  });
 
-  useMeta(
-    "Global PR Distribution Services | BAP & Associates",
-    "Expand your reach in 170+ countries with multilingual PR distribution. Connect with global audiences—start your campaign with us today!"
-  );
+  useMeta(seo.title, seo.description);
 
   useEffect(() => {
     const fetchAcf = async () => {
       try {
         // Fetch ACF data from page 519 (services global-options)
-        const res = await fetch(`${WP_API}/pages/519?_fields=acf&_=${Date.now()}`);
+        const res = await fetch(`${WP_API}/pages/519?_fields=acf,yoast_head_json&_=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
+
+        const yoast = json?.yoast_head_json || {};
+        if (yoast?.title || yoast?.description) {
+          setSeo(prev => ({
+            title: yoast.title || prev.title,
+            description: yoast.description || prev.description,
+          }));
+        }
+
         const acf = json?.acf;
 
         if (!acf || Object.keys(acf).length === 0) {

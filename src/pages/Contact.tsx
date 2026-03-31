@@ -139,11 +139,12 @@ export default function Contact() {
   const [loading, setLoading] = useState(true);
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormValues>();
   const submitMutation = useSubmitContact();
+  const [seo, setSeo] = useState({
+    title: "Contact US | BAP & Associates",
+    description: "Get in touch for expert PR, investor relations & compliance solutions. Let’s grow your business globally—contact BAP & Associates now!"
+  });
 
-  useMeta(
-    "Contact US | BAP & Associates",
-    "Get in touch for expert PR, investor relations & compliance solutions. Let’s grow your business globally—contact BAP & Associates now!"
-  );
+  useMeta(seo.title, seo.description);
 
   const onSubmit = (data: ContactFormValues) => {
     submitMutation.mutate(data, {
@@ -155,9 +156,18 @@ export default function Contact() {
     const fetchAcf = async () => {
       try {
         // Fetch ACF data from page 643 (contact)
-        const res = await fetch(`${WP_API}/pages/643?_fields=acf&_=${Date.now()}`);
+        const res = await fetch(`${WP_API}/pages/643?_fields=acf,yoast_head_json&_=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
+        
+        const yoast = json?.yoast_head_json || {};
+        if (yoast?.title || yoast?.description) {
+          setSeo(prev => ({
+            title: yoast.title || prev.title,
+            description: yoast.description || prev.description,
+          }));
+        }
+
         const rawAcf = json?.acf;
 
         if (!rawAcf || Object.keys(rawAcf).length === 0) {

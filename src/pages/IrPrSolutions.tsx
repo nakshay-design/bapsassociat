@@ -179,19 +179,29 @@ const resolveMediaId = async (field: any): Promise<string> => {
 export default function IrPrSolutions() {
   const [pageData, setPageData] = useState<IrPrData>(defaultData);
   const [loading, setLoading] = useState(true);
+  const [seo, setSeo] = useState({
+    title: "IR & PR Solutions for Business Growth | BAP & Associates",
+    description: "Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!"
+  });
 
-  useMeta(
-    "IR & PR Solutions for Business Growth | BAP & Associates",
-    "Drive investor engagement with expert IR & PR solutions. Boost visibility, target media & markets, and grow globally - partner with BAP & Associates today!"
-  );
+  useMeta(seo.title, seo.description);
 
   useEffect(() => {
     const fetchAcf = async () => {
       try {
         // Fetch ACF data from page 585 (ir-pr-solutions)
-        const res = await fetch(`${WP_API}/pages/585?_fields=acf&_=${Date.now()}`);
+        const res = await fetch(`${WP_API}/pages/585?_fields=acf,yoast_head_json&_=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
+
+        const yoast = json?.yoast_head_json || {};
+        if (yoast?.title || yoast?.description) {
+          setSeo(prev => ({
+            title: yoast.title || prev.title,
+            description: yoast.description || prev.description,
+          }));
+        }
+
         const acf = json?.acf;
 
         if (!acf || Object.keys(acf).length === 0) {

@@ -203,7 +203,7 @@ export default function IrPrSolutions() {
         console.log("ACF IrPrSolutions DATA:", acf);
 
         const sectionsList: any[] = Array.isArray(acf.ir_pr_sections) ? acf.ir_pr_sections : [];
-        
+
         // Collect all images to resolve
         const imagePromises = [
           ...sectionsList.map((s: any) => resolveMediaId(s.image || s.image_url || s.icon)),
@@ -211,7 +211,7 @@ export default function IrPrSolutions() {
         ];
 
         const resolvedUrls = await Promise.all(imagePromises);
-        
+
         const sectionImgUrls = resolvedUrls.slice(0, sectionsList.length);
         const digitalImageUrl = resolvedUrls[resolvedUrls.length - 1];
 
@@ -226,47 +226,47 @@ export default function IrPrSolutions() {
         }));
 
         // Processing filing cards
-        const filingCards: FilingCard[] = Array.isArray(acf.ir_pr_filing_cards) 
+        const filingCards: FilingCard[] = Array.isArray(acf.ir_pr_filing_cards)
           ? acf.ir_pr_filing_cards.map((c: any) => ({
-              title: (c.title || "").trim(),
-              description: (c.description || "").trim()
-            }))
+            title: (c.title || "").trim(),
+            description: (c.description || "").trim()
+          }))
           : [];
 
         // Processing digital blocks
         const digitalBlocks: DigitalBlock[] = Array.isArray(acf.ir_pr_digital_blocks)
           ? acf.ir_pr_digital_blocks.map((b: any) => ({
-              title: (b.title || "").trim(),
-              description: (b.description || "").trim()
-            }))
+            title: (b.title || "").trim(),
+            description: (b.description || "").trim()
+          }))
           : [];
 
         setPageData((prev) => ({
           ...prev,
 
           // Banner
-          services_ir_pr_banner_heading: 
+          services_ir_pr_banner_heading:
             (acf.services_ir_pr_banner_heading || "").trim() || prev.services_ir_pr_banner_heading,
-          services_ir_pr_banner_description: 
+          services_ir_pr_banner_description:
             (acf.services_ir_pr_banner_description || "").trim() || prev.services_ir_pr_banner_description,
-          services_ir_pr_banner_bg_color: 
+          services_ir_pr_banner_bg_color:
             (acf.services_ir_pr_banner_bg_color || "").trim() || prev.services_ir_pr_banner_bg_color,
-          services_ir_pr_banner_text_color: 
+          services_ir_pr_banner_text_color:
             (acf.services_ir_pr_banner_text_color || "").trim() || prev.services_ir_pr_banner_text_color,
-          services_ir_pr_banner_accent_color: 
+          services_ir_pr_banner_accent_color:
             (acf.services_ir_pr_banner_accent_color || "").trim() || prev.services_ir_pr_banner_accent_color,
-          
+
           // Sections array
           ir_pr_sections: resolvedSections.length > 0 ? resolvedSections : prev.ir_pr_sections,
 
           // Filing Section
           ir_pr_filing_heading:
             (acf.ir_pr_filing_heading || "").trim() || prev.ir_pr_filing_heading,
-          ir_pr_filing_description: 
+          ir_pr_filing_description:
             (acf.ir_pr_filing_description || "").trim() || prev.ir_pr_filing_description,
-          ir_pr_filing_bg_color: 
+          ir_pr_filing_bg_color:
             (acf.ir_pr_filing_bg_color || "").trim() || prev.ir_pr_filing_bg_color,
-          ir_pr_filing_accent_color: 
+          ir_pr_filing_accent_color:
             (acf.ir_pr_filing_accent_color || "").trim() || prev.ir_pr_filing_accent_color,
           ir_pr_filing_cards: filingCards.length > 0 ? filingCards : prev.ir_pr_filing_cards,
 
@@ -304,18 +304,18 @@ export default function IrPrSolutions() {
   return (
     <div className="w-full overflow-hidden bg-white">
       {/* Hero */}
-      <section 
-        className="relative py-24" 
+      <section
+        className="relative py-24"
         style={{ backgroundColor: services_ir_pr_banner_bg_color, color: services_ir_pr_banner_text_color }}
       >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
-            <h1 
+            <h1
               className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight"
               style={{ color: services_ir_pr_banner_text_color }}
               dangerouslySetInnerHTML={{ __html: services_ir_pr_banner_heading }}
             />
-            <p 
+            <p
               className="text-xl max-w-3xl mx-auto"
               style={{ color: `${services_ir_pr_banner_text_color}CC` }}
             >
@@ -329,7 +329,7 @@ export default function IrPrSolutions() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-32">
         {ir_pr_sections.map((section, index) => {
           const isRight = section.layout === "right";
-          
+
           return (
             <div key={index} className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Image side */}
@@ -345,9 +345,9 @@ export default function IrPrSolutions() {
                       }}
                     />
                   ) : (
-                     <div className="w-full h-64 flex items-center justify-center text-muted-foreground">
-                        {loading ? "Loading..." : "No image provided"}
-                     </div>
+                    <div className="w-full h-64 flex items-center justify-center text-muted-foreground">
+                      {loading ? "Loading..." : "No image provided"}
+                    </div>
                   )}
                 </div>
               </FadeIn>
@@ -357,7 +357,7 @@ export default function IrPrSolutions() {
                 <h2 className="text-3xl md:text-4xl font-display font-bold text-heading mb-6">
                   {section.title}
                 </h2>
-                
+
                 {/* Support multiline descriptions using paragraph splits */}
                 <div className="mb-6 space-y-4">
                   {section.description.split(/\n+/).map((p, i) => (
@@ -371,10 +371,10 @@ export default function IrPrSolutions() {
                   <ul className="space-y-3 text-muted-foreground font-medium">
                     {section.points.map((pt, i) => (
                       <li key={i} className="flex items-center gap-2">
-                        <div 
-                          className="w-2 h-2 rounded-full" 
-                          style={{ backgroundColor: services_ir_pr_banner_accent_color }} 
-                        /> 
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: services_ir_pr_banner_accent_color }}
+                        />
                         {pt.text}
                       </li>
                     ))}
@@ -390,9 +390,9 @@ export default function IrPrSolutions() {
       <section className="py-24 text-white" style={{ backgroundColor: ir_pr_filing_bg_color }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
-            <h2 
+            <h2
               className="text-3xl md:text-5xl font-display font-bold mb-8"
-              style={{ color: ir_pr_filing_accent_color }}
+              style={{ color: services_ir_pr_banner_text_color }}
             >
               {ir_pr_filing_heading}
             </h2>
@@ -405,8 +405,8 @@ export default function IrPrSolutions() {
             {ir_pr_filing_cards.map((card, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="p-8 border border-white/20 rounded-3xl bg-white/5 backdrop-blur-sm h-full flex flex-col text-left">
-                  <h3 
-                    className="text-2xl font-bold mb-4" 
+                  <h3
+                    className="text-2xl font-bold mb-4"
                     style={{ color: ir_pr_filing_accent_color }}
                   >
                     {card.title}
@@ -425,20 +425,20 @@ export default function IrPrSolutions() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <FadeIn direction="right">
-             {ir_pr_digital_image_url ? (
-                <img
-                  src={ir_pr_digital_image_url}
-                  alt="Analytics and Adwords"
-                  className="w-full h-auto rounded-3xl shadow-xl"
-                  onError={(e) => {
-                     (e.currentTarget as HTMLImageElement).style.display = "none";
-                  }}
-                />
-             ) : (
-                <div className="w-full h-64 bg-secondary/20 rounded-3xl shadow-xl flex items-center justify-center text-muted-foreground">
-                   {loading ? "Loading..." : "No image provided"}
-                </div>
-             )}
+            {ir_pr_digital_image_url ? (
+              <img
+                src={ir_pr_digital_image_url}
+                alt="Analytics and Adwords"
+                className="w-full h-auto rounded-3xl shadow-xl"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = "none";
+                }}
+              />
+            ) : (
+              <div className="w-full h-64 bg-secondary/20 rounded-3xl shadow-xl flex items-center justify-center text-muted-foreground">
+                {loading ? "Loading..." : "No image provided"}
+              </div>
+            )}
           </FadeIn>
           <FadeIn direction="left">
             {ir_pr_digital_blocks.map((block, i) => (

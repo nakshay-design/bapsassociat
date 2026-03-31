@@ -175,7 +175,7 @@ export default function GlobalOptions() {
           resolveMediaId(acf.services_banner_bg_image),
           resolveMediaId(acf.services_banner_icon),
           ...distCards.map((c: any) => resolveMediaId(c.card_icon || c.icon || c.image || c.distribution_card_icon)),
-          ...networkCards.map((c: any) => resolveMediaId(c.network_icon || c.icon || c.image || c.network_card_icon)),
+          ...networkCards.map((c: any) => resolveMediaId(c.network_icon || c.card_icon || c.icon || c.image || c.network_card_icon)),
         ];
 
         const [bannerImageUrl, bannerIconUrl, ...restUrls] = await Promise.all(imagePromises);
@@ -194,9 +194,9 @@ export default function GlobalOptions() {
 
         // ── Build resolved network cards ───────────────────────────────────
         const resolvedNetworkCards: NetworkCard[] = networkCards.map((c: any, i: number) => ({
-          network_icon: c.network_icon || c.icon || "",
+          network_icon: c.network_icon || c.card_icon || c.icon || "",
           network_icon_url: networkIconUrls[i] || "",
-          network_title: (c.network_title || c.title || c.network_card_title || "").trim(),
+          network_title: (c.network_title || c.card_title || c.title || c.network_card_title || "").trim(),
         }));
 
         // ── Build resolved FAQ list ────────────────────────────────────────

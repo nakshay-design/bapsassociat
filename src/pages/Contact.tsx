@@ -2,7 +2,7 @@ import { FadeIn } from "@/components/FadeIn";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useSubmitContact } from "@/hooks/use-contact";
 import { useMeta } from "@/hooks/useMeta";
@@ -327,19 +327,28 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-bold text-heading mb-4">Follow Us</h3>
                   <div className="flex gap-4">
-                    {contact_social_links.map((social, idx) => (
-                      <a
-                        key={idx}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center hover:bg-accent transition-colors duration-300 transform hover:-translate-y-1 shadow-md overflow-hidden"
-                      >
-                        {social.icon_url ? (
-                          <IconImage src={social.icon_url} size={24} className="rounded-none bg-transparent" />
-                        ) : null}
-                      </a>
-                    ))}
+                    {contact_social_links.map((social, idx) => {
+                      const FallbackIcons = [Facebook, Twitter, Instagram, Linkedin];
+                      const FallbackIcon = FallbackIcons[idx % FallbackIcons.length];
+
+                      return (
+                        <a
+                          key={idx}
+                          href={social.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:-translate-y-1 shadow-md overflow-hidden"
+                          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = contact_banner_accent_color; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ""; }}
+                        >
+                          {social.icon_url ? (
+                            <img src={social.icon_url} alt="Social Icon" className="w-6 h-6 object-contain" />
+                          ) : (
+                            <FallbackIcon className="w-5 h-5 text-white" />
+                          )}
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               )}

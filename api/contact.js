@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
     // 2. Send email using Resend
     const emailResponse = await resend.emails.send({
-      from: "bapassociates@resend.dev", // temporary sender (works without domain setup)
+      from: "onboarding@resend.dev", // temporary sender (works without domain setup)
       to: "akshaystoretransform@gmail.com",    // 🔥 CHANGE THIS TO YOUR EMAIL
       subject: `New Contact Form Submission: ${subject || "No Subject"}`,
       html: `

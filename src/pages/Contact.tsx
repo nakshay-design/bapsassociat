@@ -399,7 +399,7 @@ export default function Contact() {
                   size="lg"
                   className="w-full"
                   disabled={submitMutation.isPending}
-                  style={{ backgroundColor: contact_banner_accent_color }}
+                  style={{ backgroundColor: contact_banner_bg_color }}
                 >
                   {submitMutation.isPending ? "Sending..." : contact_button_text}
                 </Button>

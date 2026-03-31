@@ -198,18 +198,27 @@ const resolveImageUrl = async (field: any): Promise<string> => {
 
 export default function Home() {
   const [homeData, setHomeData] = useState<HomeData>(defaultData);
+  const [seo, setSeo] = useState({
+    title: "PR & Investor Relations Firm UK | BAP & Associates",
+    description: "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
+  });
 
-  useMeta(
-    "PR & Investor Relations Firm UK | BAP & Associates",
-    "BAP Associates is a UK-based strategic management firm helping small-cap and emerging market companies grow through investor relations, PR, compliance, and visibility solutions."
-  );
+  useMeta(seo.title, seo.description);
 
   useEffect(() => {
     const fetchAcf = async () => {
       try {
-        const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf&_=" + Date.now());
+        const res = await fetch("/wp-json/wp/v2/pages/15?_fields=acf,yoast_head_json&_=" + Date.now());
         const json = await res.json();
         const acf = json?.acf || {};
+        const yoast = json?.yoast_head_json || {};
+
+        if (yoast?.title || yoast?.description) {
+          setSeo(prev => ({
+            title: yoast.title || prev.title,
+            description: yoast.description || prev.description,
+          }));
+        }
 
         console.log("ACF DATA:", acf);
 

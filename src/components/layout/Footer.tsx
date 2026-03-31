@@ -95,7 +95,7 @@ export function Footer() {
         const res = await fetch(`${WP_API}/pages?slug=footer&_fields=id,acf&_=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        
+
         if (!json || json.length === 0 || !json[0].acf) {
           return;
         }
@@ -146,13 +146,13 @@ export function Footer() {
     <footer className="bg-primary pt-20 pb-10 border-t-4 border-accent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
-          
+
           {/* Column 1: Brand */}
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-3">
-              <img 
-                src={footer_logo} 
-                alt="BAP Logo" 
+              <img
+                src={footer_logo}
+                alt="BAP Logo"
                 className="w-40 h-20 object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -208,8 +208,8 @@ export function Footer() {
               {contact_items.map((item, idx) => {
                 const isEmail = item.value.includes('@');
                 const isPhone = !isEmail && /[0-9]/.test(item.value);
-                const href = isEmail ? `mailto:${item.value}` : isPhone ? `tel:${item.value.replace(/\D/g,'')}` : "#";
-                
+                const href = isEmail ? `mailto:${item.value}` : isPhone ? `tel:${item.value.replace(/\D/g, '')}` : "#";
+
                 return (
                   <li key={idx} className="flex items-start gap-4 text-white/80 hover:text-white transition-colors">
                     <div className="mt-1 p-2 rounded-full bg-accent/20 text-accent flex-shrink-0">

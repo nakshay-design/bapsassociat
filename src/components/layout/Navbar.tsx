@@ -30,10 +30,10 @@ const defaultData: NavbarData = {
   menu_items: [
     { label: "HOME", url: "/", has_dropdown: false, dropdown_items: null },
     { label: "ABOUT US", url: "/about", has_dropdown: false, dropdown_items: null },
-    { 
-      label: "SERVICE", 
-      url: "#", 
-      has_dropdown: true, 
+    {
+      label: "SERVICE",
+      url: "#",
+      has_dropdown: true,
       dropdown_items: [
         { label: "Global Options", url: "/services/global-options" },
         { label: "IR PR Solutions", url: "/services/ir-pr-solutions" }
@@ -99,7 +99,7 @@ export function Navbar() {
         const res = await fetch(`${WP_API}/pages?slug=header&_fields=id,acf&_=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        
+
         if (!json || json.length === 0 || !json[0].acf) {
           return;
         }
@@ -137,12 +137,12 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary shadow-lg shadow-primary/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
-          
+
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <img 
-              src={data.logo} 
-              alt="BAP Logo" 
+            <img
+              src={data.logo}
+              alt="BAP Logo"
               className="w-40 h-20 object-contain"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -155,17 +155,17 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             {data.menu_items.map((item, idx) => {
               const formattedUrl = formatUrl(item.url);
-              
+
               if (item.has_dropdown && item.dropdown_items) {
                 const isActive = item.dropdown_items.some(sub => formatUrl(sub.url) === location);
                 return (
-                  <div 
+                  <div
                     key={idx}
                     className="relative py-8"
                     onMouseEnter={() => setActiveDropdown(idx)}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    <button 
+                    <button
                       className={cn(
                         "flex items-center gap-1 text-sm font-bold tracking-wider transition-colors duration-200 hover:text-accent focus:outline-none",
                         isActive ? "text-accent" : "text-white"
@@ -218,9 +218,9 @@ export function Navbar() {
                 </Link>
               );
             })}
-            
+
             {data.cta_text && (
-              <Link 
+              <Link
                 href={formatUrl(data.cta_link)}
                 className="px-6 py-2.5 bg-accent text-white text-sm font-bold rounded-full hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 transform hover:-translate-y-0.5"
               >

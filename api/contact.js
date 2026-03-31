@@ -37,13 +37,12 @@ export default async function handler(req, res) {
 
     // 2. Send email using Resend
     const emailResponse = await resend.emails.send({
-      from: "onboarding@resend.dev", // temporary sender (works without domain setup)
+      from: "bapassociates@resend.dev", // temporary sender (works without domain setup)
       to: "pranavstoretransform@gmail.com",    // 🔥 CHANGE THIS TO YOUR EMAIL
       subject: `New Contact Form Submission: ${subject || "No Subject"}`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
           <h2>New Contact Form Submission</h2>
-
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Subject:</strong> ${subject || "N/A"}</p>

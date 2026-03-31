@@ -3,10 +3,11 @@ import { AccordionItem } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
 import { Globe2, FileText, CheckCircle2, BarChart } from "lucide-react";
 import { useMeta } from "@/hooks/useMeta";
+import IconImage from "@/components/IconImage";
 
 // ─── WordPress API base ───────────────────────────────────────────────────────
 
-const WP_API = "https://dev-bapassociates.pantheonsite.io/wp-json/wp/v2";
+const WP_API = "/wp-json/wp/v2";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,6 +36,7 @@ interface GlobalOptionsData {
   services_banner_heading: string;
   services_banner_subtitle: string;
   services_banner_bg_image_url: string;
+  services_banner_icon_url: string;
   services_banner_overlay_color: string;
   services_banner_text_color: string;
   services_banner_accent_color: string;
@@ -67,6 +69,7 @@ const defaultData: GlobalOptionsData = {
     "Efficient Solutions So You Can Focus On <span class='text-accent'>Running Your Business!</span>",
   services_banner_subtitle: "Global Options & Distribution",
   services_banner_bg_image_url: "",
+  services_banner_icon_url: "",
   services_banner_overlay_color: "#0A1F3D",
   services_banner_text_color: "#FFFFFF",
   services_banner_accent_color: "#6DBE45",
@@ -114,6 +117,7 @@ const resolveMediaId = async (field: any): Promise<string> => {
   // ACF image-object → { url, id, ... }
   if (typeof field === "object" && field !== null) {
     if (field.url) return String(field.url).trim();
+    if (field.sizes?.large) return String(field.sizes.large).trim();
     if (field.sizes?.medium) return String(field.sizes.medium).trim();
     if (field.sizes?.thumbnail) return String(field.sizes.thumbnail).trim();
   }
@@ -169,11 +173,12 @@ export default function GlobalOptions() {
 
         const imagePromises = [
           resolveMediaId(acf.services_banner_bg_image),
+          resolveMediaId(acf.services_banner_icon),
           ...distCards.map((c: any) => resolveMediaId(c.card_icon)),
           ...networkCards.map((c: any) => resolveMediaId(c.network_icon)),
         ];
 
-        const [bannerImageUrl, ...restUrls] = await Promise.all(imagePromises);
+        const [bannerImageUrl, bannerIconUrl, ...restUrls] = await Promise.all(imagePromises);
 
         const distIconUrls = restUrls.slice(0, distCards.length);
         const networkIconUrls = restUrls.slice(distCards.length);
@@ -213,6 +218,8 @@ export default function GlobalOptions() {
             (acf.services_banner_subtitle || "").trim() || prev.services_banner_subtitle,
           services_banner_bg_image_url:
             bannerImageUrl || prev.services_banner_bg_image_url,
+          services_banner_icon_url:
+            bannerIconUrl || prev.services_banner_icon_url,
           services_banner_overlay_color:
             (acf.services_banner_overlay_color || "").trim() || prev.services_banner_overlay_color,
           services_banner_text_color:
@@ -267,6 +274,7 @@ export default function GlobalOptions() {
     services_banner_heading,
     services_banner_subtitle,
     services_banner_bg_image_url,
+    services_banner_icon_url,
     services_banner_overlay_color,
     services_banner_text_color,
     services_global_options_network_heading,
@@ -308,6 +316,15 @@ export default function GlobalOptions() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
+            {services_banner_icon_url && (
+              <div className="mb-8 flex justify-center">
+                <img
+                  src={services_banner_icon_url}
+                  alt="Banner Icon"
+                  className="w-20 h-20 object-contain drop-shadow-lg"
+                />
+              </div>
+            )}
             <h1
               className="text-4xl md:text-6xl font-display font-bold mb-6 max-w-4xl mx-auto leading-tight"
               style={{ color: services_banner_text_color }}
@@ -341,18 +358,11 @@ export default function GlobalOptions() {
               <FadeIn key={i} delay={i * 0.2} className="h-full">
                 <div className="bg-secondary/20 p-10 rounded-3xl border border-border h-full flex flex-col items-center justify-center group hover:bg-white hover:shadow-2xl transition-all duration-300">
                   <div className="h-32 mb-8 flex items-center justify-center">
-                    {card.network_icon_url ? (
-                      <img
-                        src={card.network_icon_url}
-                        alt={card.network_title}
-                        className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                      />
-                    ) : (
-                      <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-                        <Globe2 className="w-10 h-10 text-primary" />
-                      </div>
-                    )}
+                    <IconImage
+                      src={card.network_icon_url}
+                      alt={card.network_title}
+                      size={100}
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-heading text-center leading-snug">
                     {card.network_title}
@@ -382,7 +392,6 @@ export default function GlobalOptions() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services_global_options_distribution_cards.map((card, i) => {
-              const FallbackIcon = card.fallback_icon;
               return (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="flex gap-6 items-start bg-white/5 p-8 rounded-3xl hover:bg-white/10 transition-colors duration-300">
@@ -390,16 +399,12 @@ export default function GlobalOptions() {
                       className="w-14 h-14 rounded-2xl text-white flex items-center justify-center flex-shrink-0"
                       style={{ backgroundColor: services_global_options_distribution_accent_color }}
                     >
-                      {card.card_icon_url ? (
-                        <img
-                          src={card.card_icon_url}
-                          alt={card.card_title}
-                          className="w-7 h-7 object-contain"
-                          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                        />
-                      ) : (
-                        FallbackIcon && <FallbackIcon className="w-7 h-7" />
-                      )}
+                      <IconImage
+                        src={card.card_icon_url}
+                        alt={card.card_title}
+                        size={32}
+                        className="bg-transparent"
+                      />
                     </div>
                     <div>
                       <h4 className="text-2xl font-bold mb-3 text-white">{card.card_title}</h4>

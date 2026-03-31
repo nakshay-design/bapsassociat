@@ -72,17 +72,17 @@ const defaultData: ContactData = {
   contact_offices_title: "Our Offices",
   contact_offices_description: "Whether you have a question about features, trials, pricing, need a demo, or anything else, our team is ready to answer all your questions.",
   contact_offices_list: [
-    { 
-      icon: "", 
-      title: "Atlanta Office (US)", 
-      address: "12460 Crabapple Rd\nAtlanta, GA 30004", 
+    {
+      icon: "",
+      title: "Atlanta Office (US)",
+      address: "12460 Crabapple Rd\nAtlanta, GA 30004",
       phone: "+1 (404) 702-4270",
       email: ""
     },
-    { 
-      icon: "", 
-      title: "London Office (UK)", 
-      address: "25 Old Broad St\nLondon EC2N-1HN, UK", 
+    {
+      icon: "",
+      title: "London Office (UK)",
+      address: "25 Old Broad St\nLondon EC2N-1HN, UK",
       phone: "+44 20 7877 0450",
       email: "info@BAPassociates.co.uk"
     },
@@ -245,15 +245,15 @@ export default function Contact() {
   return (
     <div className="w-full bg-white">
       {/* Hero */}
-      <section 
-        className={`relative ${heroPadding}`} 
+      <section
+        className={`relative ${heroPadding}`}
         style={{ backgroundColor: contact_banner_bg_color, color: contact_banner_text_color }}
       >
         <div className="absolute inset-0 overflow-hidden">
           {contact_banner_bg_image_url ? (
-            <img 
-              src={contact_banner_bg_image_url} 
-              alt="Contact Banner" 
+            <img
+              src={contact_banner_bg_image_url}
+              alt="Contact Banner"
               className="w-full h-full object-cover opacity-30 mix-blend-overlay"
               onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />
@@ -263,13 +263,13 @@ export default function Contact() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <FadeIn>
-            <h1 
+            <h1
               className="text-4xl md:text-6xl font-display font-bold mb-4"
               style={{ color: contact_banner_text_color }}
               dangerouslySetInnerHTML={{ __html: contact_banner_heading }}
             />
-            <div 
-              className="w-24 h-1.5 mx-auto rounded-full" 
+            <div
+              className="w-24 h-1.5 mx-auto rounded-full"
               style={{ backgroundColor: contact_banner_accent_color }}
             />
           </FadeIn>
@@ -278,7 +278,7 @@ export default function Contact() {
 
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          
+
           {/* Left: Contact Info */}
           <FadeIn direction="right">
             <div className="space-y-12">
@@ -328,16 +328,16 @@ export default function Contact() {
                   <h3 className="text-lg font-bold text-heading mb-4">Follow Us</h3>
                   <div className="flex gap-4">
                     {contact_social_links.map((social, idx) => (
-                      <a 
-                        key={idx} 
-                        href={social.url} 
-                        target="_blank" 
+                      <a
+                        key={idx}
+                        href={social.url}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center hover:bg-accent transition-colors duration-300 transform hover:-translate-y-1 shadow-md overflow-hidden"
                       >
-                         {social.icon_url ? (
-                            <IconImage src={social.icon_url} size={24} className="rounded-none bg-transparent" />
-                         ) : null}
+                        {social.icon_url ? (
+                          <IconImage src={social.icon_url} size={24} className="rounded-none bg-transparent" />
+                        ) : null}
                       </a>
                     ))}
                   </div>
@@ -353,48 +353,48 @@ export default function Contact() {
               <h2 className="text-3xl font-display font-bold text-heading mb-8">
                 {contact_form_title}
               </h2>
-              
+
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-heading mb-2">Your Name</label>
-                  <Input 
-                    {...register("name", { required: true })} 
-                    placeholder="John Doe" 
+                  <Input
+                    {...register("name", { required: true })}
+                    placeholder="John Doe"
                     className={errors.name ? "border-destructive focus-visible:ring-destructive/20" : ""}
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-heading mb-2">Email Address</label>
-                  <Input 
-                    type="email" 
-                    {...register("email", { required: true })} 
-                    placeholder="john@company.com" 
+                  <Input
+                    type="email"
+                    {...register("email", { required: true })}
+                    placeholder="john@company.com"
                     className={errors.email ? "border-destructive focus-visible:ring-destructive/20" : ""}
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-heading mb-2">Subject</label>
-                  <Input 
-                    {...register("subject", { required: true })} 
-                    placeholder="How can we help?" 
+                  <Input
+                    {...register("subject", { required: true })}
+                    placeholder="How can we help?"
                     className={errors.subject ? "border-destructive focus-visible:ring-destructive/20" : ""}
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-heading mb-2">Message</label>
-                  <Textarea 
-                    {...register("message", { required: true })} 
-                    placeholder="Tell us about your project..." 
+                  <Textarea
+                    {...register("message", { required: true })}
+                    placeholder="Tell us about your project..."
                     className={errors.message ? "border-destructive focus-visible:ring-destructive/20" : ""}
                   />
                 </div>
-                
-                <Button 
-                  type="submit" 
-                  size="lg" 
+
+                <Button
+                  type="submit"
+                  size="lg"
                   className="w-full"
                   disabled={submitMutation.isPending}
                   style={{ backgroundColor: contact_banner_accent_color }}

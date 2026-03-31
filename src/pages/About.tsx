@@ -117,18 +117,27 @@ const resolveMediaId = async (field: any): Promise<string> => {
 export default function About() {
   const [aboutData, setAboutData] = useState<AboutData>(defaultData);
   const [loading, setLoading] = useState(true);
+  const [seo, setSeo] = useState({
+    title: "About BAP & Associates | Global PR & IR Experts",
+    description: "Discover BAP & Associates - experts in PR, investor relations & compliance. We help businesses gain visibility and grow globally. Learn more today!"
+  });
 
-  useMeta(
-    "About BAP & Associates | Global PR & IR Experts",
-    "Discover BAP & Associates - experts in PR, investor relations & compliance. We help businesses gain visibility and grow globally. Learn more today!"
-  );
+  useMeta(seo.title, seo.description);
 
   useEffect(() => {
     const fetchAcf = async () => {
       try {
-        const res = await fetch("/wp-json/wp/v2/pages/418?_fields=acf&_=" + Date.now());
+        const res = await fetch("/wp-json/wp/v2/pages/418?_fields=acf,yoast_head_json&_=" + Date.now());
         const json = await res.json();
         const acf = json?.acf || {};
+        const yoast = json?.yoast_head_json || {};
+
+        if (yoast?.title || yoast?.description) {
+          setSeo(prev => ({
+            title: yoast.title || prev.title,
+            description: yoast.description || prev.description,
+          }));
+        }
 
         console.log("ACF ABOUT DATA:", acf);
 

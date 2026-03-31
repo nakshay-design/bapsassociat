@@ -174,8 +174,8 @@ export default function GlobalOptions() {
         const imagePromises = [
           resolveMediaId(acf.services_banner_bg_image),
           resolveMediaId(acf.services_banner_icon),
-          ...distCards.map((c: any) => resolveMediaId(c.card_icon)),
-          ...networkCards.map((c: any) => resolveMediaId(c.network_icon)),
+          ...distCards.map((c: any) => resolveMediaId(c.card_icon || c.icon || c.image || c.distribution_card_icon)),
+          ...networkCards.map((c: any) => resolveMediaId(c.network_icon || c.icon || c.image || c.network_card_icon)),
         ];
 
         const [bannerImageUrl, bannerIconUrl, ...restUrls] = await Promise.all(imagePromises);
@@ -185,18 +185,18 @@ export default function GlobalOptions() {
 
         // ── Build resolved distribution cards ─────────────────────────────
         const resolvedDistCards: DistributionCard[] = distCards.map((c: any, i: number) => ({
-          card_icon: c.card_icon ?? "",
+          card_icon: c.card_icon || c.icon || "",
           card_icon_url: distIconUrls[i] || "",
-          card_title: (c.card_title || "").trim(),
-          card_description: (c.card_description || "").trim(),
+          card_title: (c.card_title || c.title || c.distribution_card_title || "").trim(),
+          card_description: (c.card_description || c.description || "").trim(),
           fallback_icon: distributionFallbackIcons[i] ?? Globe2,
         }));
 
         // ── Build resolved network cards ───────────────────────────────────
         const resolvedNetworkCards: NetworkCard[] = networkCards.map((c: any, i: number) => ({
-          network_icon: c.network_icon ?? "",
+          network_icon: c.network_icon || c.icon || "",
           network_icon_url: networkIconUrls[i] || "",
-          network_title: (c.network_title || "").trim(),
+          network_title: (c.network_title || c.title || c.network_card_title || "").trim(),
         }));
 
         // ── Build resolved FAQ list ────────────────────────────────────────
@@ -241,7 +241,7 @@ export default function GlobalOptions() {
           services_global_options_distribution_bg_color:
             (acf.services_global_options_distribution_bg_color || "").trim() || prev.services_global_options_distribution_bg_color,
           services_global_options_distribution_accent_color:
-            (acf.services_global_options_distribution_accent_color || "").trim() || prev.services_global_options_distribution_accent_color,
+            (acf.services_global_options_distribution_accent_color || acf.services_global_options_accent_color || "").trim() || prev.services_global_options_distribution_accent_color,
           services_global_options_distribution_cards:
             resolvedDistCards.length > 0 ? resolvedDistCards : prev.services_global_options_distribution_cards,
 
